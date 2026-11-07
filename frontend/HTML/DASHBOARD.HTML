@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | SICEP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="../CSS/MENU.CSS" />
+  <link rel="stylesheet" href="../CSS/RESPONSIVO.CSS" />
+</head>
+
+<body class="bg-[#f5f5f5] overflow-hidden">
+<div class="flex h-screen w-full">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="fixed md:relative z-50 top-0 left-0 h-screen w-[260px] bg-white border-r border-gray-200 flex flex-col justify-between duration-300 -translate-x-full md:translate-x-0">
+    <div>
+      <div class="bg-[#07224f] text-white px-5 py-5">
+        <h1 class="text-[22px] font-bold">SICEP</h1>
+        <p class="text-[10px] tracking-[2px] mt-1 opacity-80">Secretaria</p>
+      </div>
+      <nav class="py-6">
+        <h3 class="text-[11px] font-bold tracking-[2px] text-gray-500 uppercase px-6 mb-5">Módulos principais</h3>
+        <ul class="space-y-1">
+          <li>
+            <a href="DASHBOARD.HTML" aria-current="page" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]">
+              <i class="fa-solid fa-table-columns w-5"></i><span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+              <i class="fa-regular fa-user w-5"></i><span>Alunos</span>
+            </a>
+          </li>
+          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
+          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
+          <li>
+            <span aria-disabled="true" title="Em breve" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-400 cursor-not-allowed"><i class="fa-regular fa-folder w-5"></i><span>Processos Acadêmicos</span><span class="text-[10px]">Em breve</span></span>
+          </li>
+          <li>
+            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+              <i class="fa-regular fa-file-lines w-5"></i><span>Documentos</span>
+            </a>
+          </li>
+          <li>
+            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+              <i class="fa-regular fa-calendar w-5"></i><span>Grade Horária</span>
+            </a>
+          </li>
+          <li>
+            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+              <i class="fa-solid fa-users w-5"></i><span>Professores</span>
+            </a>
+          </li>
+          <li>
+            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+              <i class="fa-solid fa-user-shield w-5"></i><span>Usuário e Permissões</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="border-t border-gray-200 p-6">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-[#07224f] text-white flex items-center justify-center font-semibold">DEV</div>
+        <div>
+          <h4 class="text-sm font-semibold">Desenvolvedor</h4>
+          <p class="text-xs text-gray-500">Desenvolvedor</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- OVERLAY MOBILE -->
+  <div id="overlay" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden"></div>
+
+  <main class="flex-1 min-w-0 flex flex-col overflow-hidden">
+    <header class="h-[95px] bg-white border-b border-gray-200 flex items-center justify-between gap-4 px-4 md:px-10 flex-shrink-0">
+      <div class="flex items-center gap-4">
+        <button id="menuBtn" type="button" aria-label="Abrir menu" aria-controls="sidebar" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100">
+          <i class="fa-solid fa-bars text-lg" aria-hidden="true"></i>
+        </button>
+        <div>
+          <small class="block text-[10px] tracking-[2px] uppercase text-gray-400 mb-1">Gestão Acadêmica</small>
+          <h2 class="text-lg md:text-[22px] font-semibold">Dashboard</h2>
+        </div>
+      </div>
+      <a href="../index.html" class="text-sm text-gray-600 hover:text-[#07224f]">Voltar ao login</a>
+    </header>
+    <section class="flex-1 overflow-auto p-4 md:p-10" aria-label="Indicadores acadêmicos">
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-900">Visão geral</h3>
+        <p class="text-sm text-gray-500 mt-1">Acompanhe os principais indicadores acadêmicos.</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <article class="bg-white border border-gray-200 rounded-2xl p-6">
+          <div class="flex items-center justify-between gap-4 text-gray-500">
+            <h4 class="text-sm font-medium">Alunos ativos</h4>
+            <i class="fa-solid fa-graduation-cap text-[#07224f]" aria-hidden="true"></i>
+          </div>
+          <p id="indicador-alunos" class="mt-5 text-3xl font-semibold text-[#07224f]" aria-live="polite">&mdash;</p>
+          <p class="mt-2 text-sm text-gray-500">Total de alunos com status ativo</p>
+        </article>
+        <article class="bg-white border border-gray-200 rounded-2xl p-6">
+          <div class="flex items-center justify-between gap-4 text-gray-500">
+            <h4 class="text-sm font-medium">Turmas ativas</h4>
+            <i class="fa-solid fa-users text-[#07224f]" aria-hidden="true"></i>
+          </div>
+          <p id="indicador-turmas" class="mt-5 text-3xl font-semibold text-[#07224f]" aria-live="polite">&mdash;</p>
+          <p class="mt-2 text-sm text-gray-500">Turmas em funcionamento</p>
+        </article>
+        <article class="bg-white border border-gray-200 rounded-2xl p-6">
+          <div class="flex items-center justify-between gap-4 text-gray-500">
+            <h4 class="text-sm font-medium">Professores ativos</h4>
+            <i class="fa-solid fa-book-open text-[#07224f]" aria-hidden="true"></i>
+          </div>
+          <p id="indicador-professores" class="mt-5 text-3xl font-semibold text-[#07224f]" aria-live="polite">&mdash;</p>
+          <p class="mt-2 text-sm text-gray-500">Docentes cadastrados e ativos</p>
+        </article>
+        <article class="bg-white border border-gray-200 rounded-2xl p-6">
+          <div class="flex items-center justify-between gap-4 text-gray-500">
+            <h4 class="text-sm font-medium">Taxa de ocupação</h4>
+            <i class="fa-solid fa-chart-simple text-[#07224f]" aria-hidden="true"></i>
+          </div>
+          <p id="indicador-ocupacao" class="mt-5 text-3xl font-semibold text-[#07224f]" aria-live="polite">&mdash;</p>
+          <p id="ocupacaoDescricao" class="mt-2 text-sm text-gray-500">Matrículas ativas / vagas em turmas ativas</p>
+        </article>
+      </div>
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <p id="dashboardMensagem" role="status" class="text-sm text-gray-500">Carregando indicadores…</p>
+        <button id="atualizarDashboard" type="button" class="border border-gray-300 rounded-lg px-4 py-2 bg-white text-sm disabled:opacity-50">Atualizar</button>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="../JS/INDEX.JS"></script>
+<script src="../JS/DASHBOARD.JS"></script>
+<script src="../JS/AJUDA.JS"></script>
+</body>
+</html>

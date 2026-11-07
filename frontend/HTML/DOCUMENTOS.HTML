@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="../CSS/RESPONSIVO.CSS" />
+</head>
+
+<body class="bg-[#f5f5f5] overflow-hidden" style="font-family: 'Inter', sans-serif;">
+<div class="flex h-screen w-full">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="fixed md:relative z-50 top-0 left-0 h-screen w-[260px] bg-white border-r border-gray-200 flex flex-col justify-between duration-300 -translate-x-full md:translate-x-0">
+    <div>
+      <div class="bg-[#07224f] text-white px-5 py-5">
+        <h1 class="text-[22px] font-bold">SICEP</h1>
+        <p class="text-[10px] tracking-[2px] mt-1 opacity-80">Secretaria</p>
+      </div>
+      <nav class="py-6">
+        <h3 class="text-[11px] font-bold tracking-[2px] text-gray-500 uppercase px-6 mb-5">Módulos principais</h3>
+        <ul class="space-y-1">
+          <li>
+            <a href="DASHBOARD.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+              <i class="fa-solid fa-table-columns w-5"></i><span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+              <i class="fa-regular fa-user w-5"></i><span>Alunos</span>
+            </a>
+          </li>
+          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
+          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
+          <li>
+            <span aria-disabled="true" title="Em breve" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-400 cursor-not-allowed"><i class="fa-regular fa-folder w-5"></i><span>Processos Acadêmicos</span><span class="text-[10px]">Em breve</span></span>
+          </li>
+          <li>
+            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]">
+              <i class="fa-regular fa-file-lines w-5"></i><span>Documentos</span>
+            </a>
+          </li>
+          <li>
+            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+              <i class="fa-regular fa-calendar w-5"></i><span>Grade Horária</span>
+            </a>
+          </li>
+          <li>
+            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+              <i class="fa-solid fa-users w-5"></i><span>Professores</span>
+            </a>
+          </li>
+          <li>
+            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+              <i class="fa-solid fa-user-shield w-5"></i><span>Usuário e Permissões</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="border-t border-gray-200 p-6">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-[#07224f] text-white flex items-center justify-center font-semibold">DEV</div>
+        <div>
+          <h4 class="text-sm font-semibold">Desenvolvedor</h4>
+          <p class="text-xs text-gray-500">Desenvolvedor</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- OVERLAY MOBILE -->
+  <div id="overlay" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden"></div>
+
+  <!-- MAIN -->
+  <main class="flex-1 flex flex-col w-full overflow-hidden">
+
+    <!-- TOPBAR -->
+    <header class="h-[95px] bg-white border-b border-gray-200 flex items-center px-4 md:px-10 flex-shrink-0">
+      <div class="flex items-center gap-4">
+        <button id="menuBtn" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+        <div>
+          <small class="block text-[10px] tracking-[2px] uppercase text-gray-400 mb-1">Gestão Acadêmica</small>
+          <h2 class="text-lg md:text-[22px] font-semibold">Documentos</h2>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <section class="flex-1 overflow-auto p-4 md:p-10">
+
+      <!-- BUSCA -->
+      <div class="relative mb-8 max-w-md">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+        <input id="buscaInput" type="text" placeholder="Buscar documento..."
+          class="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 text-sm outline-none focus:border-[#07224f]" />
+      </div>
+
+      <!-- SEÇÃO: EMISSÃO IMEDIATA -->
+      <div class="mb-10">
+        <div class="flex items-center gap-3 mb-5">
+          <h3 class="text-sm font-bold tracking-[2px] uppercase text-gray-500">Emissão imediata</h3>
+          <div class="flex-1 h-px bg-gray-200"></div>
+        </div>
+        <p class="text-sm text-gray-500 mb-5">Documentos em PDF com informações já cadastradas no sistema. Na janela de impressão, escolha Salvar como PDF.</p>
+        <div id="gridEmissao" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+
+          <button onclick="abrirModalDeclaracao('curso')"
+            class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex items-center justify-start hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">Declaração de Curso</p>
+          </button>
+
+          <button onclick="abrirModalDeclaracao('frequencia')"
+            class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex items-center justify-start hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">Declaração de Frequência</p>
+          </button>
+
+          <button type="button" onclick="abrirModalDeclaracao('matricula')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">Comprovante de Matrícula</p>
+            <span class="text-xs text-gray-500 leading-relaxed">Comprovar que o aluno está matriculado na instituição.</span>
+          </button>
+          <button type="button" onclick="abrirModalDeclaracao('vinculo')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">Declaração de Vínculo Escolar</p>
+            <span class="text-xs text-gray-500 leading-relaxed">Confirmar que o aluno mantém vínculo ativo com a instituição.</span>
+          </button>
+          <button type="button" onclick="abrirModalDeclaracao('boletim')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">Boletim de Notas</p>
+            <span class="text-xs text-gray-500 leading-relaxed">Apresentar notas e resultados acadêmicos.</span>
+          </button>
+          <button type="button" onclick="abrirModalDeclaracao('historico')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">Histórico de Frequência</p>
+            <span class="text-xs text-gray-500 leading-relaxed">Detalhar presenças e faltas por período ou disciplina.</span>
+          </button>
+          <button type="button" onclick="abrirModalDeclaracao('grade')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">Grade Horária Individual</p>
+            <span class="text-xs text-gray-500 leading-relaxed">Mostrar dias, horários e disciplinas do aluno.</span>
+          </button>
+          <button type="button" onclick="abrirModalDeclaracao('modulo')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">Comprovante de Conclusão de Módulo</p>
+            <span class="text-xs text-gray-500 leading-relaxed">Confirmar a conclusão de uma etapa do curso, quando aplicável.</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SEÇÃO: SOLICITAÇÕES -->
+      <div>
+        <div class="flex items-center gap-3 mb-5">
+          <h3 class="text-sm font-bold tracking-[2px] uppercase text-gray-500">Requer solicitação</h3>
+          <div class="flex-1 h-px bg-gray-200"></div>
+        </div>
+        <div id="gridSolicitacoes" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+
+          <button onclick="abrirModalCertificacao()"
+            class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex items-center justify-start hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">Certificado de Conclusão</p>
+          </button>
+
+          <button type="button" onclick="abrirModalCertificacao('trancamento')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            <p class="text-sm font-semibold text-gray-800 leading-tight">Declaração de Trancamento</p>
+            <span class="text-xs text-gray-500 leading-relaxed">Comprovar a suspensão temporária da matrícula.</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+   <!--  MODAL: DECLARAÇÃO DE CURSO / FREQUÊNCIA-->
+
+<div id="modalDeclaracao" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 p-5">
+  <div class="bg-white w-full max-w-[500px] rounded-2xl p-7">
+
+    <div class="flex items-start justify-between mb-6">
+      <h2 id="modalDeclaracaoTitulo" class="text-2xl font-semibold">Declaração de Curso</h2>
+      <button onclick="fecharModalDeclaracao()" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center">✕</button>
+    </div>
+
+    <!-- Campo dinâmico: ID do aluno ou ID da matrícula -->
+    <div class="mb-5">
+      <label id="labelIdDeclaracao" class="text-sm font-medium block mb-2">ID do aluno <span class="text-red-500">*</span></label>
+      <div class="flex gap-2">
+        <input id="idDeclaracaoInput" type="number" placeholder="Digite o ID do aluno..."
+          class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#07224f]" />
+        <button onclick="buscarDeclaracao()" class="bg-[#07224f] text-white px-4 py-3 rounded-lg text-sm hover:opacity-90">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+      <p id="erroIdDeclaracao" class="hidden text-xs text-red-500 mt-1">Não encontrado. Verifique o ID e tente novamente.</p>
+    </div>
+
+    <!-- Resultado da busca -->
+    <div id="alunoSelecionadoBox" class="hidden bg-gray-50 border border-gray-200 rounded-xl p-4 mb-5">
+      <p class="text-xs text-gray-400 mb-1">Encontrado</p>
+      <p id="alunoSelecionadoNome" class="font-semibold text-gray-800"></p>
+      <p id="alunoSelecionadoInfo" class="text-sm text-gray-500 mt-0.5"></p>
+    </div>
+
+    <!-- Campo frequência (só aparece na declaração de frequência, preenchido automaticamente) -->
+    <div id="campoFrequencia" class="hidden mb-5">
+      <label class="text-sm font-medium block mb-2">Frequência geral (%)</label>
+      <input id="frequenciaValor" type="number" min="0" max="100" readonly
+        class="w-full border border-gray-200 bg-gray-50 rounded-lg px-4 py-3 text-sm text-gray-700" />
+      <p class="text-xs text-gray-400 mt-1">Calculada automaticamente com base nos registros do banco.</p>
+    </div>
+
+    <div class="flex justify-end gap-3 pt-2">
+      <button onclick="fecharModalDeclaracao()" class="border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50 text-sm">Cancelar</button>
+      <button id="btnImprimir" onclick="imprimirDeclaracao()" disabled
+        class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90 text-sm disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2">
+        <i class="fa-solid fa-file-pdf"></i> Gerar PDF
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!--MODAL: CERTIFICAÇÃO (SOLICITAÇÃO)-->
+
+<div id="modalCertificacao" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 p-5">
+  <div class="bg-white w-full max-w-[480px] rounded-2xl p-7">
+
+    <div class="flex items-start justify-between mb-5">
+      <div>
+        <h2 id="tituloSolicitacao" class="text-2xl font-semibold mb-1">Certificado de Conclusão</h2>
+        <p class="text-gray-500 text-sm">Este documento requer solicitação prévia.</p>
+      </div>
+      <button onclick="fecharModalCertificacao()" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center">✕</button>
+    </div>
+
+    <div class="bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-3 mb-6 flex gap-3">
+      <i class="fa-solid fa-triangle-exclamation text-yellow-500 mt-0.5 flex-shrink-0"></i>
+      <p id="avisoSolicitacao" class="text-sm text-yellow-800">O certificado não pode ser emitido diretamente. É necessário registrar uma solicitação, que será verificada pelo setor responsável antes da emissão.</p>
+    </div>
+
+    <div class="space-y-4">
+
+      <div>
+        <label class="text-sm font-medium block mb-2">ID do aluno <span class="text-red-500">*</span></label>
+        <div class="flex gap-2">
+          <input id="idAlunoCertInput" type="number" placeholder="Digite o ID do aluno..."
+            class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#07224f]" />
+          <button onclick="buscarAlunoPorIdCert()" class="bg-[#07224f] text-white px-4 py-3 rounded-lg text-sm hover:opacity-90">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+        <p id="erroIdAlunoCert" class="hidden text-xs text-red-500 mt-1">Aluno não encontrado.</p>
+      </div>
+
+      <div id="alunoSelecionadoCertBox" class="hidden bg-gray-50 border border-gray-200 rounded-xl p-4">
+        <p class="text-xs text-gray-400 mb-1">Aluno encontrado</p>
+        <p id="alunoSelecionadoCertNome" class="font-semibold text-gray-800"></p>
+        <p id="alunoSelecionadoCertCurso" class="text-sm text-gray-500 mt-0.5"></p>
+      </div>
+
+      <div>
+        <label class="text-sm font-medium block mb-2">Observações</label>
+        <textarea id="obsCert" rows="2" placeholder="Informações adicionais (opcional)"
+          class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#07224f] resize-none"></textarea>
+      </div>
+
+    </div>
+
+    <div id="erroCert" class="hidden bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-3 mt-4"></div>
+    <div id="sucessoCert" class="hidden bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg px-4 py-3 mt-4 flex items-center gap-2">
+      <i class="fa-solid fa-circle-check"></i>
+      <span>Solicitação registrada com sucesso!</span>
+    </div>
+
+    <div class="flex justify-end gap-3 pt-5">
+      <button onclick="fecharModalCertificacao()" class="border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50 text-sm">Cancelar</button>
+      <button id="btnSolicitarCert" onclick="solicitarCertificacao()"
+        class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90 text-sm flex items-center gap-2">
+        <i class="fa-solid fa-paper-plane"></i> Enviar solicitação
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script src="../JS/DOCUMENTOS.JS"></script>
+<script src="../JS/AJUDA.JS"></script>
+</body>
+</html>
+

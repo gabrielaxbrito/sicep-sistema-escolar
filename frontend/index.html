@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | SICEP</title>
+  <link rel="stylesheet" href="CSS/LOGIN.CSS" />
+  <script src="JS/LOGIN.JS" defer></script>
+</head>
+<body>
+  <main class="login-card">
+    <header>
+      <span class="brand">SICEP</span>
+      <p class="eyebrow">GESTÃO ACADÊMICA</p>
+      <h1>Bem-vindo!</h1>
+      <p class="description">Entre com seu e-mail e senha para acessar o sistema.</p>
+    </header>
+    <form id="loginForm">
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="username" placeholder="seu@email.com" required />
+      </div>
+      <div class="field">
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" autocomplete="current-password" placeholder="Digite sua senha" required />
+      </div>
+      <button type="submit">Entrar</button>
+      <p id="loginStatus" class="status" role="status">A autenticação está em desenvolvimento. Use o acesso provisório para conhecer o sistema.</p>
+    </form>
+  </main>
+  <a class="dashboard-link" href="HTML/DASHBOARD.HTML">Acessar dashboard <span aria-hidden="true">→</span></a>
+</body>
+</html>

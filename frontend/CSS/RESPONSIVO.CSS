@@ -1,0 +1,50 @@
+/* Ajustes comuns aos módulos, incluindo telas baixas e teclado virtual. */
+body > .flex.h-screen {
+  height: 100vh;
+  height: 100dvh;
+}
+
+#sidebar {
+  height: 100vh;
+  height: 100dvh;
+  width: min(260px, 90vw);
+  flex-shrink: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+#sidebar > div { flex-shrink: 0; }
+body > .flex > main { min-width: 0; }
+main > section { min-height: 0; }
+main > header { height: auto !important; min-height: 95px; gap: 12px; padding-block: 16px; }
+main > header > div { min-width: 0; }
+main > header :is(h1, h2) { overflow-wrap: anywhere; }
+.print-actions { flex-wrap: wrap; }
+#menuBtn { flex-shrink: 0; min-width: 40px; min-height: 40px; }
+main > section :is(p, h3, h4, dd) { overflow-wrap: anywhere; }
+main :is(input, select, textarea), body > [id^="modal"] :is(input, select, textarea) { min-width: 0; max-width: 100%; }
+
+#tableWrapper { max-width: 100%; overflow-x: auto !important; }
+#tableWrapper table { min-width: 640px; }
+
+body > [id^="modal"] { padding: 16px; }
+body > [id^="modal"] > div {
+  min-width: 0;
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+body > [id^="modal"] :is(h2, p) { overflow-wrap: anywhere; }
+body > [id^="modal"] .justify-end { flex-wrap: wrap; }
+body > [id^="modal"] .items-start > button { flex-shrink: 0; }
+
+@media (max-width: 639px) {
+  main > header { flex-wrap: wrap; }
+  main > header > button, main > header > a { margin-left: auto; }
+  body > [id^="modal"] > div { padding: 20px; }
+  body > [id^="modal"] .justify-end > button { flex: 1 1 130px; justify-content: center; }
+  /* Evita o zoom automático nos campos em navegadores móveis. */
+  main input, main select, main textarea,
+  body > [id^="modal"] input, body > [id^="modal"] select, body > [id^="modal"] textarea { font-size: 16px !important; }
+}
