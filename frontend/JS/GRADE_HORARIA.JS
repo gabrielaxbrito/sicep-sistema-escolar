@@ -1,6 +1,7 @@
+// Mostra a grade das turmas consultadas na API.
 (() => {
   'use strict';
-  const API = 'http://localhost:3000';
+  const API = window.SICEP_API_URL;
   const dias = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
   const abreviacoes = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom'];
   const el = id => document.getElementById(id);

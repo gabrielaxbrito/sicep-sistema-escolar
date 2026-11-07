@@ -1,5 +1,6 @@
-﻿(() => {
-  const API = 'http://localhost:3000';
+// Consulta e gerencia os cursos pela API.
+(() => {
+  const API = window.SICEP_API_URL;
   const el = id => document.getElementById(id);
   const modal = el('modal');
   const form = el('cursoForm');

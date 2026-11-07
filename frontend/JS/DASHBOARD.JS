@@ -1,3 +1,4 @@
+// Mostra os indicadores do sistema consultados na API.
 (() => {
   const mensagem = document.getElementById('dashboardMensagem');
   const atualizar = document.getElementById('atualizarDashboard');
@@ -5,12 +6,11 @@
   let carregando = false;
 
   async function consultar(caminho, signal) {
-    const resposta = await fetch(`http://localhost:3000${caminho}`, { cache: 'no-store', signal });
+    const resposta = await fetch(`${window.SICEP_API_URL}${caminho}`, { cache: 'no-store', signal });
     if (!resposta.ok) throw new Error(`Falha em ${caminho}: HTTP ${resposta.status}`);
     return resposta.json();
   }
 
-  // Compatibilidade com servidores que ainda não carregaram a nova rota /dashboard.
   async function consultarRotasExistentes(signal) {
     const [alunos, turmas, professores] = await Promise.allSettled([
       consultar('/alunos', signal),
@@ -59,7 +59,7 @@
         : dados.vagas === 0 ? 'Nenhuma vaga em turmas ativas'
         : `${formatador.format(dados.matriculas)} matrículas ativas / ${formatador.format(dados.vagas)} vagas em turmas ativas`;
       mensagem.textContent = dados.erros.length
-        ? `Indicadores indisponíveis: ${dados.erros.join(', ')}. Verifique o backend e reinicie-o para carregar as rotas atualizadas.`
+        ? `Indicadores indisponíveis: ${dados.erros.join(', ')}. Tente atualizar novamente em instantes.`
         : `Dados atualizados às ${new Date().toLocaleTimeString('pt-BR')}.`;
     } catch {
       for (const nome of ['alunos', 'turmas', 'professores', 'ocupacao']) {

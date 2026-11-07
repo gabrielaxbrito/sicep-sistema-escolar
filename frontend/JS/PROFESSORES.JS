@@ -1,13 +1,27 @@
-(() => {
-  const { professores, cursos, turmas } = window.dadosProfessores;
-  const ativos = professores.filter(professor => professor.status === 'ativo');
+// Consulta os professores e suas turmas no banco de dados.
+(async () => {
+  async function consultar(caminho) {
+    const resposta = await fetch(`${window.SICEP_API_URL}${caminho}`, { signal: AbortSignal.timeout(15000) });
+    if (!resposta.ok) throw new Error('Falha ao consultar professores');
+    return resposta.json();
+  }
+  let professores, cursos, turmas;
+  try {
+    [professores, cursos] = await Promise.all([consultar('/professores'), consultar('/cursos')]);
+    turmas = (await Promise.all(cursos.map(curso => consultar(`/turmas/${encodeURIComponent(curso.id)}`)))).flat();
+  } catch {
+    document.getElementById('totalAtivos').textContent = '—';
+    document.getElementById('resultadoBusca').textContent = 'Não foi possível carregar os professores. Recarregue a página para tentar novamente.';
+    return;
+  }
+  const ativos = professores.filter(professor => String(professor.status).toLowerCase() === 'ativo');
   const busca = document.getElementById('buscaProfessor');
   const lista = document.getElementById('listaProfessores');
   const detalhes = document.getElementById('detalhesProfessor');
   const painel = document.getElementById('painelLista');
   let ultimoProfessor;
   const normalizar = texto => texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR');
-  const escapar = texto => String(texto).replace(/[&<>"']/g, caractere => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[caractere]));
+  const escapar = texto => String(texto ?? '').replace(/[&<>"']/g, caractere => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[caractere]));
   const iniciais = nome => nome.split(' ').filter(Boolean).filter((_, indice, partes) => indice === 0 || indice === partes.length - 1).map(parte => parte[0]).join('');
   const vinculadas = id => turmas.filter(turma => turma.professor_id === id);
   const quantidade = total => `${total} ${total === 1 ? 'turma vinculada' : 'turmas vinculadas'}`;

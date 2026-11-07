@@ -1,4 +1,5 @@
-const API = 'http://localhost:3000';
+// Consulta e gerencia as turmas pela API.
+const API = window.SICEP_API_URL;
 const cardsContainer = document.getElementById('cardsContainer');
 let todasTurmas = [];
 let cursosDisponiveis = [];

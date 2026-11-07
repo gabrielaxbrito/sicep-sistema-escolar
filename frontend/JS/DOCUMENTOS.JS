@@ -1,4 +1,5 @@
-const API = 'http://localhost:3000'
+// Consulta os dados dos alunos para gerar documentos.
+const API = window.SICEP_API_URL
 
 let tipoDeclaracao       = null
 let alunoSelecionado     = null

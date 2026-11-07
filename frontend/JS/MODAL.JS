@@ -1,4 +1,5 @@
-const API = 'http://localhost:3000'
+// Gerencia os formulários de cursos e turmas pela API.
+const API = window.SICEP_API_URL
 
 // =========================
 // ELEMENTOS - CURSO
@@ -437,7 +438,7 @@ async function carregarCursos() {
       <div class="col-span-full text-center py-20">
         <i class="fa-solid fa-triangle-exclamation text-4xl text-red-300 mb-4"></i>
         <h2 class="text-xl font-semibold text-gray-500 mb-2">Erro ao carregar cursos</h2>
-        <p class="text-gray-400 mb-4">Verifique se o servidor backend está rodando em localhost:3000</p>
+        <p class="text-gray-400 mb-4">Não foi possível acessar a API. Tente novamente em instantes.</p>
         <button onclick="carregarCursos()" class="border border-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-gray-50">
           <i class="fa-solid fa-rotate-right mr-1"></i>Tentar novamente
         </button>

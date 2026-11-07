@@ -1,0 +1,20 @@
+{
+  "description": "Gerenciam o projeto inteiro, incluindo o Express e a função do Netlify.",
+  "name": "sicep",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node backend/src/local.js",
+    "dev": "node --watch backend/src/local.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.105.4",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "serverless-http": "^4.0.0"
+  }
+}

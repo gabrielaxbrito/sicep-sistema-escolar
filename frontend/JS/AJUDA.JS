@@ -1,35 +1,4 @@
-/* ============================================================================
- * AJUDA.JS — Assistente de IA do SICEP (arquivo único, "plug-and-play")
- * ============================================================================
- *
- * COMO USAR
- *   Basta incluir esta linha no final do <body> de cada página interna:
- *     <script src="../JS/AJUDA.JS"></script>
- *   O arquivo cria sozinho o ícone flutuante, o painel de conversa, o CSS e a
- *   lógica de guia. Não depende de nenhum outro arquivo do front-end.
- *
- * O QUE ELE FAZ
- *   1. Mostra um ícone no canto inferior direito (pode ser ARRASTADO).
- *   2. Ao clicar, abre uma caixa onde a pessoa escreve o que quer fazer
- *      ("quero criar um novo curso", "como adiciono um aluno?").
- *   3. A pergunta vai para o backend (rota POST /ajuda), que consulta a IA
- *      (Groq). A IA devolve a INTENÇÃO: um roteiro pronto ou uma lista de
- *      passos montada só com elementos reais do SICEP.
- *   4. O assistente destaca, passo a passo, onde clicar — navegando entre
- *      páginas quando necessário. Ele NUNCA clica nem preenche nada pelo
- *      usuário: só mostra o caminho.
- *
- * SEGURANÇA
- *   A chave da IA NÃO fica aqui. Ela fica só no servidor (.env →
- *   GROQ_API_KEY). Este arquivo apenas chama o backend.
- *
- * COMO MANTER (quando o SICEP mudar)
- *   - Mudou o id/botão de uma tela? Ajuste o seletor em ELEMENTOS.
- *   - Quer ensinar um fluxo novo? Crie uma entrada em ROTEIROS.
- *   - Backend em outra porta/endereço? Defina antes deste script:
- *       <script>window.SICEP_API_URL = 'http://meu-servidor:3000'</script>
- * ========================================================================== */
-
+// Conecta o assistente do sistema ao backend da IA.
 ;(function () {
   'use strict'
 
@@ -42,7 +11,7 @@
   // ══════════════════════════════════════════════════════════════════════════
 
   // Mesmo endereço que os outros scripts do SICEP usam (ex.: CURSOS.JS).
-  const API_URL = String(window.SICEP_API_URL || 'http://localhost:3000').replace(/\/+$/, '')
+  const API_URL = String(window.SICEP_API_URL).replace(/\/+$/, '')
 
   const CHAVE_POSICAO = 'sicep_ajuda_posicao' // localStorage: onde o ícone foi deixado
   const CHAVE_ESTADO  = 'sicep_ajuda_estado'  // sessionStorage: guia em andamento
