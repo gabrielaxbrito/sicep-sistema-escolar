@@ -1,0 +1,26 @@
+:root { font-family: Inter, "Segoe UI", sans-serif; color: #17243a; background: #f5f5f5; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 40px 20px 110px; }
+.login-card { width: 100%; max-width: 440px; padding: 40px; background: white; border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: 0 16px 48px #07224f0a; }
+.brand { color: #07224f; font-size: 32px; font-weight: 800; letter-spacing: 1px; }
+.eyebrow { margin: 6px 0 32px; color: #64748b; font-size: 10px; letter-spacing: 2px; }
+h1 { margin: 0 0 10px; font-size: 26px; }
+.description, .status { color: #64748b; font-size: 14px; line-height: 1.6; }
+.description { margin: 0 0 28px; }
+.field { margin-bottom: 20px; }
+label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; }
+input { width: 100%; padding: 13px 14px; border: 1px solid #cbd5e1; border-radius: 7px; font: inherit; font-size: 14px; }
+button, .dashboard-link { border: 0; border-radius: 7px; background: #07224f; color: white; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+button { width: 100%; padding: 14px; }
+button:hover, .dashboard-link:hover { background: #123b75; }
+:focus-visible { outline: 3px solid #719ee5; outline-offset: 3px; }
+.status { margin: 18px 0 0; font-size: 12px; }
+.dashboard-link { position: fixed; bottom: 24px; right: 24px; padding: 15px 20px; text-decoration: none; display: flex; align-items: center; gap: 16px; box-shadow: 0 6px 20px #07224f20; }
+@media (max-width: 480px) { .login-card { padding: 28px 24px; } .dashboard-link { right: 16px; bottom: 16px; } }
+input { min-width: 0; font-size: 16px; }
+.dashboard-link { max-width: calc(100% - 32px); bottom: max(16px, env(safe-area-inset-bottom)); }
+@media (max-height: 600px) {
+  body { display: flex; flex-direction: column; justify-content: flex-start; gap: 24px; padding: 24px 16px; }
+  .login-card { flex-shrink: 0; }
+  .dashboard-link { position: static; align-self: flex-end; flex-shrink: 0; }
+}

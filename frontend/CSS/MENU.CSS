@@ -1,0 +1,79 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* SIDEBAR */
+
+.menu-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #6b7280;
+    text-transform: uppercase;
+    margin: 0 24px 18px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 12px 24px;
+
+    font-size: 14px;
+    color: #374151;
+
+    text-decoration: none;
+
+    transition: 0.2s;
+}
+
+.menu-item:hover {
+    background: #f3f4f6;
+}
+
+.menu-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.menu-left i {
+    width: 18px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.active-menu {
+    background: #ececec;
+    color: #000;
+    font-weight: 600;
+}
+
+.badge {
+    min-width: 22px;
+    height: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 4px;
+
+    font-size: 10px;
+    background: white;
+}
+
+/* SCROLL */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
