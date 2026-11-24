@@ -5,30 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | SICEP</title>
   <link rel="stylesheet" href="CSS/LOGIN.CSS" />
-  <script src="JS/CONFIG.JS"></script>
   <script src="JS/LOGIN.JS" defer></script>
 </head>
 <body>
   <main class="login-card">
-    <header>
-      <span class="brand">SICEP</span>
-      <p class="eyebrow">GESTÃO ACADÊMICA</p>
-      <h1>Bem-vindo!</h1>
-      <p class="description">Entre com seu e-mail e senha para acessar o sistema.</p>
-    </header>
-    <form id="loginForm">
-      <div class="field">
-        <label for="email">E-mail</label>
-        <input id="email" name="email" type="email" autocomplete="username" placeholder="seu@email.com" required />
-      </div>
-      <div class="field">
-        <label for="senha">Senha</label>
-        <input id="senha" name="senha" type="password" autocomplete="current-password" placeholder="Digite sua senha" required />
-      </div>
-      <button type="submit">Entrar</button>
-      <p id="loginStatus" class="status" role="status">A autenticação está em desenvolvimento. Use o acesso provisório para conhecer o sistema.</p>
-    </form>
+    <section class="login-visual" aria-hidden="true">
+      <img src="IMG/login-bem-vindo.jpg" alt="" />
+    </section>
+
+    <section class="login-form-area">
+      <header>
+        <span class="brand">SICEP</span>
+        <h1>Entrar</h1>
+        <p class="description">Entre com seu e-mail e senha para acessar o sistema.</p>
+      </header>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">E-mail</label>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
+            <input id="email" name="email" type="email" autocomplete="username" placeholder="seu@email.com" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="senha">Senha</label>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10V8a6 6 0 0 1 12 0v2M5 10h14v10H5z" /></svg>
+            <input id="senha" name="senha" type="password" autocomplete="current-password" placeholder="Digite sua senha" required />
+          </div>
+        </div>
+
+        <div class="options">
+          <label class="remember"><input type="checkbox" id="lembrar" name="lembrar" checked /> Lembrar de mim</label>
+          <a href="#" class="forgot">Esqueceu a senha?</a>
+        </div>
+
+        <button type="submit">Entrar</button>
+        <p id="loginStatus" class="status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
   </main>
-  <a class="dashboard-link" href="HTML/DASHBOARD.HTML">Acessar dashboard <span aria-hidden="true">→</span></a>
 </body>
 </html>

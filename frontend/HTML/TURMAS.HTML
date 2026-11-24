@@ -16,8 +16,9 @@
     input:checked + .dia-aula { background: #07224f; color: white; border-color: #07224f; }
     input:focus-visible + .dia-aula { outline: 2px solid #2563eb; outline-offset: 3px; }
   </style>
+  <link rel="stylesheet" href="../CSS/TURMAS.CSS" />
   <link rel="stylesheet" href="../CSS/RESPONSIVO.CSS" />
-  <script src="../JS/CONFIG.JS"></script>
+  <script src="../JS/AUTH.JS"></script>
 </head>
 
 <body class="bg-[#f5f5f5] overflow-hidden">
@@ -28,7 +29,7 @@
     <div>
       <div class="bg-[#07224f] text-white px-5 py-5">
         <h1 class="text-[22px] font-bold">SICEP</h1>
-        <p class="text-[10px] tracking-[2px] mt-1 opacity-80">Secretaria</p>
+        <p class="text-[10px] tracking-[2px] mt-1 opacity-80">Sistema Integrado de Controle para Ensino Profissionalizante</p>
       </div>
       <nav class="py-6">
         <h3 class="text-[11px] font-bold tracking-[2px] text-gray-500 uppercase px-6 mb-5">Módulos principais</h3>
@@ -106,40 +107,196 @@
 
     <!-- CONTENT -->
     <section class="flex-1 overflow-auto p-4 md:p-10">
-      <div class="flex items-center justify-between mb-6">
-        <h3 class="text-3xl font-semibold">Turmas cadastradas</h3>
-      </div>
-      <div class="h-[1px] bg-black/10 mb-8"></div>
-
-      <label for="filtroCurso" class="block text-sm font-medium mb-2">Filtrar por curso</label><select id="filtroCurso" class="border border-gray-300 rounded-lg px-4 py-3 bg-white mb-6 w-full sm:w-80"><option value="">Todos os cursos</option></select><p id="mensagemTurmas" role="status" class="text-sm text-gray-500 mb-4"></p>
-      <div id="cardsContainer" class="grid grid-cols-1 gap-6"></div>
+    <div class="mb-6">
+      <h2 class="text-2xl font-semibold text-gray-800">Turmas cadastradas</h2>
+      <p class="text-sm text-gray-500 mt-2">Consulte, filtre e edite as turmas da oferta acadêmica.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6" aria-label="Resumo das turmas">
+      <div class="summary"><span>Turmas encontradas</span><strong id="totalTurmas">&mdash;</strong></div>
+      <div class="summary"><span>Professores</span><strong id="totalProfessores">&mdash;</strong></div>
+    </div>
+    <form id="filtros" class="bg-white border border-gray-200 rounded-xl p-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6" aria-label="Filtrar turmas">
+      <div><label for="filtroCurso">Curso</label><select id="filtroCurso"><option value="">Todos os cursos</option></select></div>
+      <div><label for="filtroProfessor">Professor</label><select id="filtroProfessor"><option value="">Todos os professores</option></select></div>
+      <div><label for="filtroTurno">Turno</label><select id="filtroTurno"><option value="">Todos os turnos</option><option value="manha">Manhã</option><option value="tarde">Tarde</option><option value="noite">Noite</option></select></div>
+      <div><label for="filtroBusca">Disciplina ou turma</label><input id="filtroBusca" type="search" placeholder="Buscar disciplina ou código..." /></div>
+    </form>
+    <p id="mensagemTurmas" role="status" aria-live="polite" class="text-sm text-gray-500 mb-4"></p>
+    <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5"></div>
     </section>
 
   </main>
 </div>
 
-<!-- MODAL TURMA -->
-<div id="modalTurma" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 p-5">
-  <div class="bg-white w-full max-w-[850px] rounded-2xl p-8 max-h-[95vh] overflow-auto">
-
-    <div class="flex items-center justify-between mb-8">
+<!-- MODAL PRESENÇA (chamada por disciplina e data) -->
+<div id="modalPresenca" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 p-5">
+  <div class="bg-white w-full max-w-[1100px] rounded-2xl p-6 max-h-[96vh] overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="presencaTitulo">
+    <div class="flex items-start justify-between mb-6">
       <div>
-        <h2 class="text-3xl font-semibold text-[#111827]">Nova turma</h2>
-        <p class="text-gray-500 text-sm mt-1">Cadastre uma nova turma acadêmica</p>
+        <small class="block text-[10px] tracking-[2px] uppercase text-gray-400 mb-1">Lançar presença</small>
+        <h2 id="presencaTitulo" class="text-2xl font-semibold"></h2>
+        <p id="presencaSub" class="text-sm text-gray-500 mt-1"></p>
       </div>
-      <button id="closeTurmaModal" class="w-10 h-10 rounded-lg hover:bg-gray-100 duration-200 text-lg">✕</button>
+      <button id="closePresenca" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center" aria-label="Fechar">✕</button>
     </div>
 
-    <form id="turmaForm" class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-x-6 gap-y-3">
 
+      <div class="md:col-start-1 md:row-start-1 space-y-3">
+        <div><label for="presencaDisciplina" class="block text-xs text-gray-500 mb-1">Disciplina</label>
+          <select id="presencaDisciplina" class="w-full border border-gray-300 bg-white rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f]"></select></div>
+        <div><label for="presencaData" class="block text-xs text-gray-500 mb-1">Data da aula</label>
+          <input id="presencaData" type="date" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f]" /></div>
+        <div><label for="presencaTituloAula" class="block text-xs text-gray-500 mb-1">Título da aula <span class="text-gray-400">(opcional)</span></label>
+          <input id="presencaTituloAula" type="text" maxlength="150" placeholder="Ex.: Introdução a funções" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f]" /></div>
+        <div><label for="presencaConteudoAula" class="block text-xs text-gray-500 mb-1">O que foi dado <span class="text-gray-400">(opcional)</span></label>
+          <textarea id="presencaConteudoAula" rows="5" maxlength="2000" placeholder="Resumo do conteúdo, exercícios, avisos…" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f] resize-none"></textarea></div>
+        <p id="presencaAulaAviso" class="hidden text-xs text-amber-700"></p>
+        <div class="flex gap-2 pt-1">
+          <button type="button" id="presencaCancelar" class="flex-1 border border-gray-300 px-4 py-2.5 rounded-lg text-sm hover:bg-gray-100">Fechar</button>
+          <button type="button" id="presencaSalvar" class="flex-1 bg-[#07224f] text-white px-4 py-2.5 rounded-lg text-sm hover:opacity-90 disabled:opacity-50">Salvar presença</button>
+        </div>
+      </div>
+
+      <div class="md:col-start-1 md:row-start-2">
+        <p id="presencaContagem" class="text-sm text-gray-500" aria-live="polite"></p>
+      </div>
+
+      <div class="md:col-start-2 md:row-start-1 md:relative min-w-0 order-last md:order-none">
+        <div class="md:absolute md:inset-0 md:pt-5 flex flex-col min-h-0">
+          <p id="presencaAviso" class="hidden text-sm bg-amber-50 border border-amber-200 text-amber-800 rounded-lg px-4 py-3 mb-3"></p>
+          <p id="presencaErro" role="alert" class="text-sm text-red-600 empty:hidden mb-3"></p>
+          <p id="presencaCarregando" class="hidden text-sm text-gray-500 py-6 text-center">Carregando alunos…</p>
+
+          <div id="presencaConteudo" class="hidden [&:not(.hidden)]:flex flex-col flex-1 min-h-0">
+            <div class="flex flex-wrap items-center gap-3 mb-3">
+              <div class="relative flex-1 min-w-[180px]">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                <input id="presencaBusca" type="search" placeholder="Pesquisar aluno por nome" aria-label="Pesquisar aluno" class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#07224f]/30 focus:border-[#07224f]">
+              </div>
+              <div class="flex gap-2 shrink-0">
+                <button type="button" id="presencaTodos" class="border border-gray-300 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 whitespace-nowrap">Todos presentes</button>
+                <button type="button" id="presencaNenhum" class="border border-gray-300 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 whitespace-nowrap">Todos ausentes</button>
+              </div>
+            </div>
+            <div class="overflow-auto border border-gray-200 rounded-none max-h-[300px] md:max-h-none md:flex-1 md:min-h-0">
+              <table class="w-full text-sm">
+                <thead class="bg-[#07224f] text-xs uppercase text-white sticky top-0"><tr>
+                  <th scope="col" class="text-left px-4 py-3">Aluno</th><th scope="col" class="text-center px-4 py-3 w-40">Presença</th>
+                </tr></thead>
+                <tbody id="presencaLista"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMAÇÃO DE PRESENÇA -->
+<div id="modalPresencaOk" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-[60] p-5">
+  <div class="bg-white w-full max-w-[420px] rounded-2xl p-7 text-center" role="alertdialog" aria-modal="true" aria-labelledby="presencaOkTitulo" aria-describedby="presencaOkResumo">
+    <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-2xl"><i class="fa-solid fa-check"></i></div>
+    <h2 id="presencaOkTitulo" class="text-xl font-semibold text-gray-900">Presença salva com sucesso</h2>
+    <p id="presencaOkResumo" class="text-sm text-gray-500 mt-2"></p>
+    <div class="grid grid-cols-2 gap-3 mt-5">
+      <div class="border border-gray-200 rounded-xl py-3"><strong id="presencaOkPresentes" class="block text-2xl text-[#07224f]">0</strong><span class="text-xs text-gray-500">Presentes</span></div>
+      <div class="border border-gray-200 rounded-xl py-3"><strong id="presencaOkFaltas" class="block text-2xl text-[#07224f]">0</strong><span class="text-xs text-gray-500">Faltas</span></div>
+    </div>
+    <p id="presencaOkAviso" class="hidden text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-4"></p>
+    <button type="button" id="presencaOkFechar" class="mt-6 w-full bg-[#07224f] text-white px-5 py-3 rounded-xl hover:opacity-90">OK</button>
+  </div>
+</div>
+
+<!-- MODAL ALUNOS DA TURMA -->
+<div id="modalAlunosTurma" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 p-5">
+  <div class="bg-white w-full max-w-[1100px] rounded-2xl p-6 max-h-[96vh] overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="alunosTurmaTitulo">
+    <div class="flex items-start justify-between mb-6">
+      <div>
+        <small class="block text-[10px] tracking-[2px] uppercase text-gray-400 mb-1">Alunos e frequência</small>
+        <h2 id="alunosTurmaTitulo" class="text-2xl font-semibold"></h2>
+        <p id="alunosTurmaSub" class="text-sm text-gray-500 mt-1"></p>
+      </div>
+      <button id="closeAlunosTurma" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center" aria-label="Fechar">✕</button>
+    </div>
+    <div id="alunosTurmaCarregando" class="text-sm text-gray-500 py-10 text-center">Carregando...</div>
+    <div id="alunosTurmaErro" class="hidden bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-3"></div>
+    <div id="alunosTurmaConteudo" class="hidden">
+      <style>
+        #modalAlunosTurma .resumo-lateral .summary { padding: 12px 16px; }
+        #modalAlunosTurma .resumo-lateral .summary span { font-size: 12px; }
+        #modalAlunosTurma .resumo-lateral .summary strong { margin-top: 2px; font-size: 22px; }
+      </style>
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-x-6 gap-y-3">
+
+        <label class="md:col-start-1 md:row-start-1 flex items-center gap-2 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 focus-within:ring-2 focus-within:ring-[#07224f]/30 focus-within:border-[#07224f]">
+          <span class="whitespace-nowrap">Data da aula</span>
+          <input id="atData" type="date" aria-label="Data da aula" class="min-w-0 flex-1 bg-transparent text-sm text-gray-800 outline-none">
+        </label>
+
+        <div class="md:col-start-1 md:row-start-2 resumo-lateral grid grid-cols-2 md:grid-cols-1 gap-2 content-start">
+          <div class="summary"><span>Vagas</span><strong id="atVagas">—</strong></div>
+          <div class="summary"><span>Ocupadas</span><strong id="atOcupadas">—</strong></div>
+          <div class="summary"><span>Livres</span><strong id="atLivres">—</strong></div>
+          <div class="summary"><span>Frequência total</span><strong id="atFreq">—</strong></div>
+        </div>
+
+        <div class="md:col-start-1 md:row-start-3">
+          <p id="atAulas" class="text-sm text-gray-500"></p>
+          <button id="atLimpar" type="button" class="hidden mt-2 text-sm text-[#07224f] font-medium hover:underline">Limpar filtros</button>
+        </div>
+
+        <div class="md:col-start-2 md:row-start-1 relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+          <input id="atBusca" type="search" placeholder="Pesquisar aluno por nome ou e-mail" aria-label="Pesquisar aluno" class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#07224f]/30 focus:border-[#07224f]">
+        </div>
+
+        <div class="md:col-start-2 md:row-start-2 md:relative min-w-0">
+          <div class="overflow-auto border border-gray-200 rounded-none max-h-[260px] md:max-h-none md:absolute md:inset-0">
+            <table class="w-full text-sm">
+              <thead class="bg-[#07224f] text-xs uppercase text-white sticky top-0"><tr>
+                <th scope="col" class="text-left px-4 py-3">Aluno</th><th scope="col" class="text-center px-4 py-3">Situação</th>
+                <th scope="col" class="text-center px-4 py-3">Presenças</th><th scope="col" class="text-center px-4 py-3">Faltas</th><th scope="col" class="text-center px-4 py-3">Frequência</th>
+              </tr></thead>
+              <tbody id="atLinhas"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TURMA (2 abas: dados da turma e grade de disciplinas) -->
+<div id="modalTurma" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 p-5">
+  <div class="bg-white w-full max-w-[850px] rounded-2xl p-8 max-h-[95vh] overflow-auto" role="dialog" aria-modal="true" aria-labelledby="tituloModalTurma">
+
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 id="tituloModalTurma" class="text-3xl font-semibold text-[#111827]">Nova turma</h2>
+        <p id="subtituloModalTurma" class="text-gray-500 text-sm mt-1">Cadastre uma nova turma acadêmica</p>
+      </div>
+      <button id="closeTurmaModal" class="w-10 h-10 rounded-lg hover:bg-gray-100 duration-200 text-lg" aria-label="Fechar">✕</button>
+    </div>
+
+    <div role="tablist" class="flex gap-2 border-b border-gray-200 mb-6">
+      <button type="button" role="tab" id="abaTurmaDados" data-aba="dados" class="aba-turma px-4 py-3 text-sm font-semibold border-b-[3px] -mb-px">1. Dados da turma</button>
+      <button type="button" role="tab" id="abaTurmaGrade" data-aba="grade" class="aba-turma px-4 py-3 text-sm font-semibold border-b-[3px] -mb-px">2. Disciplinas e horários</button>
+    </div>
+
+    <!-- ABA 1 -->
+    <form id="turmaForm" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
-          <label class="block text-sm font-medium mb-2">Código do curso</label>
+          <label for="curso_id" class="block text-sm font-medium mb-2">Código do curso</label>
           <input type="number" id="curso_id" placeholder="Ex: 1" required
-            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]" />
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f] read-only:bg-gray-100" />
         </div>
         <div>
-          <label class="block text-sm font-medium mb-2">Curso</label>
+          <label for="curso_nome" class="block text-sm font-medium mb-2">Curso</label>
           <input type="text" id="curso_nome" readonly
             class="w-full border border-gray-300 bg-gray-100 rounded-xl px-4 py-3" />
         </div>
@@ -148,81 +305,101 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
-          <label class="block text-sm font-medium mb-2">Código da turma</label>
-          <input type="text" id="codigo" required
-            class="w-full border border-gray-300 rounded-xl px-4 py-3" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-2">Disciplina</label>
-          <input type="text" id="disciplina" required
-            class="w-full border border-gray-300 rounded-xl px-4 py-3" />
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div>
-          <label class="block text-sm font-medium mb-2">Código do professor</label>
-          <input type="number" id="professor_id" placeholder="Ex: 1"
+          <label for="codigo" class="block text-sm font-medium mb-2">Código da turma</label>
+          <input type="text" id="codigo" required placeholder="Ex: PED-2026-NOITE"
             class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]" />
         </div>
         <div>
-          <label class="block text-sm font-medium mb-2">Professor</label>
-          <input type="text" id="professor" readonly
-            class="w-full border border-gray-300 bg-gray-100 rounded-xl px-4 py-3" />
-        </div>
-      </div>
-      <p id="professorStatus" class="text-sm text-gray-500 -mt-4"></p>
-
-      <fieldset class="border border-gray-200 rounded-xl p-5" aria-describedby="horarioAjuda horarioErro">
-        <legend class="px-2 text-sm font-semibold">Dias e horário das aulas</legend>
-        <p id="horarioAjuda" class="text-sm text-gray-500 mb-4">Selecione os dias da semana. O horário será aplicado a todos os dias selecionados.</p>
-        <div class="flex flex-wrap gap-2 mb-5">
-          <label><input type="checkbox" name="diaAula" value="Segunda" class="peer sr-only" /><span class="dia-aula">Seg</span></label>
-          <label><input type="checkbox" name="diaAula" value="Terça" class="peer sr-only" /><span class="dia-aula">Ter</span></label>
-          <label><input type="checkbox" name="diaAula" value="Quarta" class="peer sr-only" /><span class="dia-aula">Qua</span></label>
-          <label><input type="checkbox" name="diaAula" value="Quinta" class="peer sr-only" /><span class="dia-aula">Qui</span></label>
-          <label><input type="checkbox" name="diaAula" value="Sexta" class="peer sr-only" /><span class="dia-aula">Sex</span></label>
-          <label><input type="checkbox" name="diaAula" value="Sábado" class="peer sr-only" /><span class="dia-aula">Sáb</span></label>
-          <label><input type="checkbox" name="diaAula" value="Domingo" class="peer sr-only" /><span class="dia-aula">Dom</span></label>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div><label for="horaInicio" class="block text-sm font-medium mb-2">Início</label><input id="horaInicio" type="time" required class="w-full border border-gray-300 rounded-xl px-4 py-3" /></div>
-          <div><label for="horaFim" class="block text-sm font-medium mb-2">Término</label><input id="horaFim" type="time" required aria-describedby="horarioErro" class="w-full border border-gray-300 rounded-xl px-4 py-3" /></div>
-        </div>
-        <p id="horarioErro" role="alert" class="text-sm text-red-600 mt-3"></p>
-        <p id="horarioResumo" aria-live="polite" class="text-sm text-gray-500 mt-3">Selecione os dias e informe o horário.</p>
-      </fieldset>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div>
-          <label class="block text-sm font-medium mb-2">Sala</label>
-          <input type="text" id="sala" required placeholder="Ex: Bloco A - Sala 12"
-            class="w-full border border-gray-300 rounded-xl px-4 py-3" />
+          <label for="qtd_vagas_turmas" class="block text-sm font-medium mb-2">Quantidade de vagas</label>
+          <input type="number" id="qtd_vagas_turmas" min="1" required
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]" />
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
-          <label class="block text-sm font-medium mb-2">Quantidade de vagas</label>
-          <input type="number" id="qtd_vagas_turmas" required
-            class="w-full border border-gray-300 rounded-xl px-4 py-3" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-2">Status</label>
+          <label for="status" class="block text-sm font-medium mb-2">Status</label>
           <select id="status" class="w-full border border-gray-300 rounded-xl px-4 py-3 bg-white">
             <option value="ativa">Ativa</option>
             <option value="encerrada">Encerrada</option>
           </select>
         </div>
       </div>
+      <p id="turmaErro" role="alert" class="text-sm text-red-600 min-h-[1.25rem]"></p>
 
-      <div class="flex justify-end gap-3 pt-6">
+      <div class="flex justify-end gap-3 pt-2">
         <button type="button" id="cancelTurmaModal"
           class="border border-gray-300 px-6 py-3 rounded-xl hover:bg-gray-100 duration-200">Cancelar</button>
         <button type="submit"
-          class="bg-[#07224f] text-white px-6 py-3 rounded-xl hover:opacity-90 duration-200">Criar turma</button>
+          class="bg-[#07224f] text-white px-6 py-3 rounded-xl hover:opacity-90 duration-200">Salvar e continuar</button>
       </div>
-
     </form>
+
+    <!-- ABA 2 -->
+    <div id="painelGrade" class="hidden">
+      <p class="text-sm text-gray-500 mb-5">Adicione cada disciplina da turma com seu professor, dias, horário e sala. Cada linha é salva assim que você clica em Adicionar.</p>
+
+      <form id="gradeForm" class="space-y-5 border border-gray-200 rounded-2xl p-5 mb-5" novalidate>
+        <div>
+          <label for="gradeDisciplina" class="block text-sm font-medium mb-2">Disciplina</label>
+          <select id="gradeDisciplina" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-3 outline-none focus:border-[#07224f]">
+            <option value="">Carregando…</option>
+          </select>
+          <p id="gradeDisciplinaStatus" class="text-xs text-gray-500 mt-2"></p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label for="professor_id" class="block text-sm font-medium mb-2">Código do professor</label>
+            <input type="number" id="professor_id" placeholder="Ex: 1"
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]" />
+          </div>
+          <div>
+            <label for="professor" class="block text-sm font-medium mb-2">Professor</label>
+            <input type="text" id="professor" readonly
+              class="w-full border border-gray-300 bg-gray-100 rounded-xl px-4 py-3" />
+          </div>
+        </div>
+        <p id="professorStatus" class="text-sm text-gray-500 -mt-3"></p>
+
+        <fieldset class="border border-gray-200 rounded-xl p-5" aria-describedby="horarioAjuda horarioErro">
+          <legend class="px-2 text-sm font-semibold">Dias e horário da aula</legend>
+          <p id="horarioAjuda" class="text-sm text-gray-500 mb-4">Selecione os dias da semana. O horário vale para todos os dias selecionados.</p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <label><input type="checkbox" name="diaAula" value="Segunda" class="peer sr-only" /><span class="dia-aula">Seg</span></label>
+            <label><input type="checkbox" name="diaAula" value="Terça" class="peer sr-only" /><span class="dia-aula">Ter</span></label>
+            <label><input type="checkbox" name="diaAula" value="Quarta" class="peer sr-only" /><span class="dia-aula">Qua</span></label>
+            <label><input type="checkbox" name="diaAula" value="Quinta" class="peer sr-only" /><span class="dia-aula">Qui</span></label>
+            <label><input type="checkbox" name="diaAula" value="Sexta" class="peer sr-only" /><span class="dia-aula">Sex</span></label>
+            <label><input type="checkbox" name="diaAula" value="Sábado" class="peer sr-only" /><span class="dia-aula">Sáb</span></label>
+            <label><input type="checkbox" name="diaAula" value="Domingo" class="peer sr-only" /><span class="dia-aula">Dom</span></label>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div><label for="horaInicio" class="block text-sm font-medium mb-2">Início</label><input id="horaInicio" type="time" class="w-full border border-gray-300 rounded-xl px-4 py-3" /></div>
+            <div><label for="horaFim" class="block text-sm font-medium mb-2">Término</label><input id="horaFim" type="time" aria-describedby="horarioErro" class="w-full border border-gray-300 rounded-xl px-4 py-3" /></div>
+          </div>
+          <p id="horarioErro" role="alert" class="text-sm text-red-600 mt-3"></p>
+          <p id="horarioResumo" aria-live="polite" class="text-sm text-gray-500 mt-3">Selecione os dias e informe o horário.</p>
+        </fieldset>
+
+        <div>
+          <label for="sala" class="block text-sm font-medium mb-2">Sala</label>
+          <input type="text" id="sala" placeholder="Ex: Bloco A - Sala 12"
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]" />
+        </div>
+
+        <p id="gradeErro" role="alert" class="text-sm text-red-600 min-h-[1.25rem]"></p>
+        <div class="flex justify-end gap-3">
+          <button type="button" id="gradeCancelar" class="hidden border border-gray-300 px-5 py-3 rounded-xl hover:bg-gray-100">Cancelar edição</button>
+          <button type="submit" id="gradeSalvar" class="bg-[#07224f] text-white px-5 py-3 rounded-xl hover:opacity-90">Adicionar</button>
+        </div>
+      </form>
+
+      <h3 class="font-semibold text-gray-800 mb-3">Grade da turma</h3>
+      <ul id="gradeLista" class="divide-y divide-gray-100 border border-gray-200 rounded-xl"></ul>
+      <div class="flex justify-end pt-6"><button type="button" id="concluirTurma" class="bg-[#07224f] text-white px-6 py-3 rounded-xl hover:opacity-90">Concluir</button></div>
+    </div>
+
   </div>
 </div>
 

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="../CSS/MENU.CSS" />
   <link rel="stylesheet" href="../CSS/RESPONSIVO.CSS" />
-  <script src="../JS/CONFIG.JS"></script>
+  <script src="../JS/AUTH.JS"></script>
 </head>
 
 <body class="bg-[#f5f5f5] overflow-hidden">
@@ -23,7 +23,7 @@
     <div>
       <div class="bg-[#07224f] text-white px-5 py-5">
         <h1 class="text-[22px] font-bold">SICEP</h1>
-        <p class="text-[10px] tracking-[2px] mt-1 opacity-80">Secretaria</p>
+        <p class="text-[10px] tracking-[2px] mt-1 opacity-80">Sistema Integrado de Controle para Ensino Profissionalizante</p>
       </div>
       <nav class="py-6">
         <h3 class="text-[11px] font-bold tracking-[2px] text-gray-500 uppercase px-6 mb-5">Módulos principais</h3>
@@ -134,7 +134,7 @@
       <div id="errorState" class="hidden flex-col items-center justify-center py-24 gap-4">
         <i class="fa-solid fa-triangle-exclamation text-4xl text-red-300"></i>
         <h2 class="text-xl font-semibold text-gray-500">Erro ao carregar alunos</h2>
-        <p class="text-gray-400 text-center">Não foi possível acessar a API. Tente novamente em instantes.</p>
+        <p class="text-gray-400 text-center">Verifique se o servidor backend está rodando em<br><code class="bg-gray-100 px-2 py-0.5 rounded text-xs">localhost:3000</code></p>
         <button onclick="carregarAlunos()" class="border border-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 mt-2">
           <i class="fa-solid fa-rotate-right mr-1"></i>Tentar novamente
         </button>
@@ -144,13 +144,13 @@
       <div id="tableWrapper" class="hidden bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <table class="w-full text-left">
           <thead>
-            <tr class="border-b border-gray-100 bg-gray-50">
-              <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Aluno</th>
-              <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell">CPF</th>
-              <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider hidden md:table-cell">E-mail</th>
-              <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Turmas</th>
-              <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-              <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Ações</th>
+            <tr class="border-b border-[#07224f] bg-[#07224f]">
+              <th class="px-6 py-4 text-xs font-semibold text-white uppercase tracking-wider">Aluno</th>
+              <th class="px-6 py-4 text-xs font-semibold text-white uppercase tracking-wider hidden sm:table-cell">CPF</th>
+              <th class="px-6 py-4 text-xs font-semibold text-white uppercase tracking-wider hidden md:table-cell">E-mail</th>
+              <th class="px-6 py-4 text-xs font-semibold text-white uppercase tracking-wider hidden lg:table-cell">Turmas</th>
+              <th class="px-6 py-4 text-xs font-semibold text-white uppercase tracking-wider">Status</th>
+              <th class="px-6 py-4 text-xs font-semibold text-white uppercase tracking-wider text-center w-px whitespace-nowrap">Ações</th>
             </tr>
           </thead>
           <tbody id="tabelaAlunos" class="divide-y divide-gray-100"></tbody>
@@ -230,6 +230,48 @@
 </div>
 
 <!-- MODAL MATRÍCULA -->
+<!-- MODAL VISÃO GERAL DO ALUNO -->
+<div id="modalVisao" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 p-5">
+  <div class="bg-white w-full max-w-[820px] rounded-2xl p-7 max-h-[92vh] overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="visaoNome">
+    <div class="flex items-start justify-between mb-6">
+      <div>
+        <small class="block text-[10px] tracking-[2px] uppercase text-gray-400 mb-1">Matrícula e frequência</small>
+        <h2 id="visaoNome" class="text-2xl font-semibold"></h2>
+        <p id="visaoContato" class="text-sm text-gray-500 mt-1"></p>
+      </div>
+      <button id="closeModalVisao" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center" aria-label="Fechar">✕</button>
+    </div>
+
+    <div role="tablist" class="flex gap-2 border-b border-gray-200 mb-6">
+      <button type="button" role="tab" id="abaDados" data-aba="dados" class="aba-visao px-5 py-3 text-base font-semibold border-b-[3px] -mb-px">Dados Pessoais</button>
+      <button type="button" role="tab" id="abaCursos" data-aba="cursos" class="aba-visao px-5 py-3 text-base font-semibold border-b-[3px] -mb-px">Cursos e Matrículas</button>
+    </div>
+
+    <div id="visaoCarregando" class="text-sm text-gray-500 py-10 text-center">Carregando...</div>
+    <div id="visaoErro" class="hidden bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-3 mb-4"></div>
+
+    <!-- ABA DADOS PESSOAIS -->
+    <div id="painelDados" role="tabpanel" class="hidden border border-gray-200 rounded-2xl p-6">
+      <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+        <div><dt class="text-sm text-gray-500">Nome completo</dt><dd id="dadoNome" class="text-lg mt-1"></dd></div>
+        <div><dt class="text-sm text-gray-500">CPF</dt><dd id="dadoCpf" class="text-lg mt-1"></dd></div>
+        <div><dt class="text-sm text-gray-500">E-mail</dt><dd id="dadoEmail" class="text-lg mt-1 break-all"></dd></div>
+        <div><dt class="text-sm text-gray-500">Status</dt><dd id="dadoStatus" class="mt-1"></dd></div>
+        <div><dt class="text-sm text-gray-500">Data de criação</dt><dd id="dadoCriado" class="text-lg mt-1"></dd></div>
+      </dl>
+    </div>
+
+    <!-- ABA CURSOS E MATRÍCULAS -->
+    <div id="painelCursos" role="tabpanel" class="hidden border border-gray-200 rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-semibold text-gray-900">Cursos <span id="visaoQtd" class="text-sm font-normal text-gray-500"></span></h3>
+        <button id="visaoNovaMatricula" type="button" class="bg-[#07224f] text-white text-sm px-4 py-2 rounded-lg hover:opacity-90"><i class="fa-solid fa-plus mr-2"></i>Nova matrícula</button>
+      </div>
+      <div id="visaoLista" class="border border-gray-200 rounded-xl divide-y divide-gray-200 overflow-hidden"></div>
+    </div>
+  </div>
+</div>
+
 <div id="modalMatricula" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 p-5">
   <div class="bg-white w-full max-w-[500px] rounded-2xl p-7">
     <div class="flex items-start justify-between mb-6">
@@ -265,374 +307,7 @@
 </div>
 
 <script src="../JS/INDEX.JS"></script>
-<script>
-
-  const API = window.SICEP_API_URL
-
-  // ========================= ESTADO =========================
-
-  let todosAlunos           = []
-  let editandoId            = null
-  let excluindoId           = null
-  let matriculaAlunoIdAtual = null
-
-  // ========================= ELEMENTOS =========================
-
-  const modal          = document.getElementById('modal')
-  const modalMatricula = document.getElementById('modalMatricula')
-  const modalExcluir   = document.getElementById('modalExcluir')
-  const alunoForm      = document.getElementById('alunoForm')
-  const buscaInput     = document.getElementById('buscaInput')
-  const filtroStatus   = document.getElementById('filtroStatus')
-  const tabelaAlunos   = document.getElementById('tabelaAlunos')
-  const totalAlunos    = document.getElementById('totalAlunos')
-  const loadingState   = document.getElementById('loadingState')
-  const emptyState     = document.getElementById('emptyState')
-  const errorState     = document.getElementById('errorState')
-  const tableWrapper   = document.getElementById('tableWrapper')
-
-  // ========================= MODAL ALUNO =========================
-
-  function abrirModal(edicao = false) {
-    document.getElementById('modalTitulo').textContent = edicao ? 'Editar Aluno'      : 'Novo Aluno'
-    document.getElementById('submitLabel').textContent = edicao ? 'Salvar Alterações' : 'Cadastrar Aluno'
-    document.getElementById('erroMsg').classList.add('hidden')
-    modal.classList.remove('hidden')
-    modal.classList.add('flex')
-  }
-
-  function fecharModal() {
-    modal.classList.add('hidden')
-    modal.classList.remove('flex')
-    alunoForm.reset()
-    editandoId = null
-  }
-
-  document.getElementById('novoAlunoBtn').addEventListener('click', () => abrirModal(false))
-  document.getElementById('closeModal').addEventListener('click', fecharModal)
-  document.getElementById('cancelModal').addEventListener('click', fecharModal)
-
-  // ========================= SUBMIT ALUNO =========================
-
-  alunoForm.addEventListener('submit', async (e) => {
-    e.preventDefault()
-
-    const btn = document.getElementById('submitBtn')
-    btn.disabled = true
-
-    const payload = {
-      nome:   document.getElementById('nome').value.trim(),
-      cpf:    document.getElementById('cpf').value.trim()   || null,
-      email:  document.getElementById('email').value.trim(),
-      status: document.getElementById('status').value
-    }
-
-    try {
-      const url    = editandoId ? `${API}/alunos/${editandoId}` : `${API}/alunos`
-      const method = editandoId ? 'PUT' : 'POST'
-
-      const res  = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload)
-      })
-
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Erro ao salvar')
-
-      fecharModal()
-      carregarAlunos()
-
-    } catch(err) {
-      const el = document.getElementById('erroMsg')
-      el.textContent = err.message
-      el.classList.remove('hidden')
-    } finally {
-      btn.disabled = false
-    }
-  })
-
-  // ========================= EDITAR =========================
-
-  async function abrirEdicao(id) {
-    try {
-      const res  = await fetch(`${API}/alunos/${id}`)
-      const data = await res.json()
-
-      if (!res.ok) throw new Error(data.error)
-
-      editandoId = id
-
-      document.getElementById('nome').value   = data.nome   || ''
-      document.getElementById('cpf').value    = data.cpf    || ''
-      document.getElementById('email').value  = data.email  || ''
-      document.getElementById('status').value = data.status || 'ativo'
-
-      abrirModal(true)
-
-    } catch(err) {
-      alert('Erro ao carregar aluno: ' + err.message)
-    }
-  }
-
-  // ========================= EXCLUSÃO =========================
-
-  function confirmarExclusao(id, nome) {
-    excluindoId = id
-    document.getElementById('nomeExcluir').textContent = nome
-    modalExcluir.classList.remove('hidden')
-    modalExcluir.classList.add('flex')
-  }
-
-  document.getElementById('cancelExcluir').addEventListener('click', () => {
-    modalExcluir.classList.add('hidden')
-    modalExcluir.classList.remove('flex')
-    excluindoId = null
-  })
-
-  document.getElementById('confirmarExcluir').addEventListener('click', async () => {
-    if (!excluindoId) return
-    try {
-      const res  = await fetch(`${API}/alunos/${excluindoId}`, { method: 'DELETE' })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error)
-      modalExcluir.classList.add('hidden')
-      modalExcluir.classList.remove('flex')
-      excluindoId = null
-      carregarAlunos()
-    } catch(err) {
-      alert('Erro ao excluir: ' + err.message)
-    }
-  })
-
-  // ========================= MODAL MATRÍCULA =========================
-
-  async function abrirModalMatricula(alunoId, alunoNome) {
-    matriculaAlunoIdAtual = alunoId
-    document.getElementById('matriculaAlunoNome').textContent = alunoNome
-    document.getElementById('erroMatricula').classList.add('hidden')
-    document.getElementById('matriculaTurmaId').innerHTML = '<option value="">Selecione primeiro um curso</option>'
-
-    try {
-      const res  = await fetch(`${API}/cursos`)
-      const data = await res.json()
-      const sel  = document.getElementById('matriculaCursoId')
-      sel.innerHTML = '<option value="">Selecione um curso</option>'
-      data.forEach(c => {
-        sel.innerHTML += `<option value="${c.id}">${c.nome}</option>`
-      })
-    } catch(err) {
-      console.error('Erro ao carregar cursos:', err)
-    }
-
-    modalMatricula.classList.remove('hidden')
-    modalMatricula.classList.add('flex')
-  }
-
-  function fecharModalMatricula() {
-    modalMatricula.classList.add('hidden')
-    modalMatricula.classList.remove('flex')
-    document.getElementById('matriculaCursoId').innerHTML = '<option value="">Selecione um curso</option>'
-    document.getElementById('matriculaTurmaId').innerHTML = '<option value="">Selecione primeiro um curso</option>'
-    matriculaAlunoIdAtual = null
-  }
-
-  document.getElementById('closeModalMatricula').addEventListener('click', fecharModalMatricula)
-  document.getElementById('cancelMatricula').addEventListener('click', fecharModalMatricula)
-
-  document.getElementById('matriculaCursoId').addEventListener('change', async function() {
-    const cursoId = this.value
-    const sel     = document.getElementById('matriculaTurmaId')
-
-    if (!cursoId) {
-      sel.innerHTML = '<option value="">Selecione primeiro um curso</option>'
-      return
-    }
-
-    sel.innerHTML = '<option value="">Carregando turmas...</option>'
-
-    try {
-      const res  = await fetch(`${API}/turmas/${cursoId}`)
-      const data = await res.json()
-      sel.innerHTML = '<option value="">Selecione uma turma</option>'
-      if (data.length === 0) {
-        sel.innerHTML = '<option value="">Nenhuma turma disponível neste curso</option>'
-        return
-      }
-      data.forEach(t => {
-        sel.innerHTML += `<option value="${t.id}">${t.disciplina} — ${t.codigo} (${t.horario})</option>`
-      })
-    } catch(err) {
-      sel.innerHTML = '<option value="">Erro ao carregar turmas</option>'
-    }
-  })
-
-  document.getElementById('confirmarMatricula').addEventListener('click', async () => {
-    const turma_id = document.getElementById('matriculaTurmaId').value
-
-    if (!turma_id) {
-      const el = document.getElementById('erroMatricula')
-      el.textContent = 'Selecione uma turma antes de continuar'
-      el.classList.remove('hidden')
-      return
-    }
-
-    try {
-      const res  = await fetch(`${API}/alunos/${matriculaAlunoIdAtual}/matriculas`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ turma_id: Number(turma_id) })
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error)
-      fecharModalMatricula()
-      carregarAlunos()
-    } catch(err) {
-      const el = document.getElementById('erroMatricula')
-      el.textContent = err.message
-      el.classList.remove('hidden')
-    }
-  })
-
-  // ========================= CARREGAR ALUNOS =========================
-
-  async function carregarAlunos() {
-    loadingState.classList.remove('hidden')
-    emptyState.classList.add('hidden')
-    errorState.classList.add('hidden')
-    tableWrapper.classList.add('hidden')
-
-    try {
-      const res  = await fetch(`${API}/alunos`)
-      if (!res.ok) throw new Error('Servidor retornou erro')
-      const data = await res.json()
-      todosAlunos = data
-      renderizarTabela(data)
-    } catch(err) {
-      loadingState.classList.add('hidden')
-      errorState.classList.remove('hidden')
-      errorState.classList.add('flex')
-    }
-  }
-
-  // ========================= RENDERIZAR TABELA =========================
-
-  function renderizarTabela(alunos) {
-    loadingState.classList.add('hidden')
-
-    const total = alunos.length
-    totalAlunos.textContent = `${total} aluno${total !== 1 ? 's' : ''} encontrado${total !== 1 ? 's' : ''}`
-
-    if (total === 0) {
-      emptyState.classList.remove('hidden')
-      emptyState.classList.add('flex')
-      tableWrapper.classList.add('hidden')
-      return
-    }
-
-    emptyState.classList.add('hidden')
-    tableWrapper.classList.remove('hidden')
-
-    tabelaAlunos.innerHTML = alunos.map(aluno => {
-
-      const turmasAtivas = (aluno.matriculas || [])
-        .filter(m => m.status === 'ativa')
-        .map(m => m.turmas?.disciplina || '—')
-
-      const turmasLabel = turmasAtivas.length > 0
-        ? turmasAtivas.slice(0, 2).join(', ') + (turmasAtivas.length > 2 ? ` +${turmasAtivas.length - 2}` : '')
-        : '<span class="text-gray-300">Sem matrícula</span>'
-
-      return `
-        <tr class="hover:bg-gray-50 duration-150">
-          <td class="px-6 py-4">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-full bg-[#07224f]/10 text-[#07224f] flex items-center justify-center font-semibold text-sm flex-shrink-0">
-                ${aluno.nome.charAt(0).toUpperCase()}
-              </div>
-              <p class="font-medium text-gray-800 text-sm">${aluno.nome}</p>
-            </div>
-          </td>
-          <td class="px-6 py-4 hidden sm:table-cell">
-            <span class="text-sm text-gray-500 font-mono">${aluno.cpf || '—'}</span>
-          </td>
-          <td class="px-6 py-4 hidden md:table-cell">
-            <span class="text-sm text-gray-600">${aluno.email || '—'}</span>
-          </td>
-          <td class="px-6 py-4 hidden lg:table-cell">
-            <span class="text-sm text-gray-600">${turmasLabel}</span>
-          </td>
-          <td class="px-6 py-4">
-            ${badgeStatus(aluno.status)}
-          </td>
-          <td class="px-6 py-4 text-right">
-            <div class="flex items-center justify-end gap-1">
-              <button onclick="abrirModalMatricula(${aluno.id}, '${aluno.nome.replace(/'/g, "\\'")}')"
-                class="w-8 h-8 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 duration-200 flex items-center justify-center"
-                title="Matricular em turma">
-                <i class="fa-solid fa-graduation-cap text-sm"></i>
-              </button>
-              <button onclick="abrirEdicao(${aluno.id})"
-                class="w-8 h-8 rounded-lg text-gray-400 hover:text-[#07224f] hover:bg-gray-100 duration-200 flex items-center justify-center"
-                title="Editar">
-                <i class="fa-regular fa-pen-to-square text-sm"></i>
-              </button>
-              <button onclick="confirmarExclusao(${aluno.id}, '${aluno.nome.replace(/'/g, "\\'")}')"
-                class="w-8 h-8 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 duration-200 flex items-center justify-center"
-                title="Excluir">
-                <i class="fa-regular fa-trash-can text-sm"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      `
-    }).join('')
-  }
-
-  // ========================= BADGE STATUS =========================
-
-  function badgeStatus(status) {
-    const map = {
-      ativo:   { bg: 'bg-green-50', text: 'text-green-700', dot: 'bg-green-500', label: 'Ativo'   },
-      inativo: { bg: 'bg-gray-100', text: 'text-gray-600',  dot: 'bg-gray-400',  label: 'Inativo' },
-    }
-    const s = map[status] || map['inativo']
-    return `
-      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${s.bg} ${s.text}">
-        <span class="w-1.5 h-1.5 rounded-full ${s.dot}"></span>${s.label}
-      </span>`
-  }
-
-  // ========================= FILTROS =========================
-
-  function filtrar() {
-    const busca  = buscaInput.value.toLowerCase()
-    const status = filtroStatus.value
-    const result = todosAlunos.filter(a =>
-      (!busca  || a.nome?.toLowerCase().includes(busca) || a.cpf?.includes(busca) || a.email?.toLowerCase().includes(busca)) &&
-      (!status || a.status === status)
-    )
-    renderizarTabela(result)
-  }
-
-  buscaInput.addEventListener('input', filtrar)
-  filtroStatus.addEventListener('change', filtrar)
-
-  // ========================= MÁSCARA CPF =========================
-
-  document.getElementById('cpf').addEventListener('input', function() {
-    let v = this.value.replace(/\D/g, '').slice(0, 11)
-    v = v.replace(/(\d{3})(\d)/, '$1.$2')
-    v = v.replace(/(\d{3})(\d)/, '$1.$2')
-    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2')
-    this.value = v
-  })
-
-  // ========================= INIT =========================
-
-  carregarAlunos()
-
-</script>
+<script src="../JS/ALUNOS.JS"></script>
 <script src="../JS/AJUDA.JS"></script>
 </body>
 </html>

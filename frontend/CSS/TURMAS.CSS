@@ -1,0 +1,45 @@
+/* Mesmo visual da Grade Horária: cards de resumo e filtros */
+.summary { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; }
+.summary span { display: block; color: #6b7280; font-size: 13px; }
+.summary strong { display: block; margin-top: 8px; color: #07224f; font-size: 28px; }
+#filtros label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 8px; color: #4b5563; }
+#filtros select, #filtros input { width: 100%; background: white; border: 1px solid #d1d5db; border-radius: 8px; padding: 10px; font-size: 13px; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid #2563eb; outline-offset: 3px; }
+
+/* Cards das turmas */
+.turma-card { display: flex; flex-direction: column; gap: 14px; background: white; border: 1px solid #e5e7eb; border-left: 3px solid #315f9f; border-radius: 12px; padding: 20px; overflow-wrap: anywhere; }
+.turma-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.turma-codigo { font-size: 12px; font-weight: 600; color: #315f9f; letter-spacing: .5px; }
+.turma-card h3 { font-size: 17px; font-weight: 600; color: #07224f; line-height: 1.35; }
+.turma-selo { font-size: 11px; font-weight: 600; border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+.turma-selo.ativa { background: #ecfdf3; color: #15803d; }
+.turma-selo.encerrada { background: #f3f4f6; color: #6b7280; }
+.turma-dados { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+.turma-dados div:first-child, .turma-dados .largo { grid-column: 1 / -1; }
+.turma-dados dt { font-size: 11px; color: #6b7280; margin-bottom: 3px; }
+.turma-dados dd { font-size: 13px; font-weight: 500; color: #1f2937; }
+.turma-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 14px; border-top: 1px solid #f1f5f9; }
+.turma-acoes button { font-size: 13px; font-weight: 500; border-radius: 8px; padding: 8px 14px; background: white; }
+.turma-acoes .editar { border: 1px solid #d1d5db; color: #07224f; }
+.turma-acoes .editar:hover { background: #f3f4f6; }
+.turma-acoes .excluir { border: 1px solid #fecaca; color: #dc2626; }
+.turma-acoes .excluir:hover { background: #fef2f2; }
+
+/* Grade (disciplinas) dentro do card da turma */
+.turma-grade { border-top: 1px solid #f1f5f9; padding-top: 12px; }
+.turma-grade-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 12px; font-size: 12px; font-weight: 600; color: #4b5563; background: transparent; border: 0; padding: 4px 0; cursor: pointer; text-align: left; }
+.turma-grade-toggle:hover { color: #07224f; }
+.turma-grade-toggle i { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 11px; background: white; }
+.turma-grade-corpo { margin-top: 8px; }
+.turma-grade-corpo[hidden] { display: none; }
+.turma-grade ul { display: flex; flex-direction: column; gap: 8px; }
+.turma-aula { display: flex; flex-direction: column; gap: 2px; background: #f9fafb; border-radius: 8px; padding: 8px 10px; }
+.turma-aula strong { font-size: 13px; color: #07224f; }
+.turma-aula span { font-size: 12px; color: #6b7280; }
+.turma-grade-vazia { font-size: 12px; color: #9ca3af; }
+
+/* Chave presente/falta da chamada */
+.presenca-chave { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+.presenca-chave input { width: 18px; height: 18px; accent-color: #07224f; cursor: pointer; }
+.presenca-sim { font-size: 13px; font-weight: 600; color: #15803d; min-width: 56px; }
+.presenca-nao { font-size: 13px; font-weight: 600; color: #dc2626; min-width: 56px; }

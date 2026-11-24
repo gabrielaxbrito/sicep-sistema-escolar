@@ -1,7 +1,6 @@
-// Mostra a grade das turmas consultadas na API.
 (() => {
   'use strict';
-  const API = window.SICEP_API_URL;
+  const API = 'http://localhost:3000';
   const dias = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
   const abreviacoes = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom'];
   const el = id => document.getElementById(id);
@@ -43,7 +42,7 @@
       (!el('turno').value || turno(turma.horario) === el('turno').value) &&
       (!busca || normalizar(`${turma.disciplina || ''} ${turma.codigo || ''}`).includes(busca))
     ).sort((a, b) => (horaInicial(a.horario) ?? 1440) - (horaInicial(b.horario) ?? 1440));
-    el('totalTurmas').textContent = filtradas.length;
+    el('totalTurmas').textContent = new Set(filtradas.map(t => t.turma_id ?? t.id)).size;
     el('totalProfessores').textContent = new Set(filtradas.map(t => t.professor_id || t.professor).filter(Boolean)).size;
     el('totalDias').textContent = new Set(filtradas.flatMap(t => diasDoHorario(t.horario))).size;
     el('grade').replaceChildren();
@@ -58,10 +57,10 @@
       coluna.append(conteudo);
       el('grade').append(coluna);
     });
-    const pendentes = filtradas.filter(t => !diasDoHorario(t.horario).length);
+    const pendentes = filtradas.filter(t => t.status !== 'encerrada' && !diasDoHorario(t.horario).length);
     el('pendentes').classList.toggle('hidden', !pendentes.length);
     el('listaPendentes').replaceChildren(...pendentes.map(cartao));
-    el('estado').textContent = filtradas.length ? `${filtradas.length} turma(s) na grade • Semana recorrente` : 'Nenhuma turma encontrada. Ajuste os filtros ou cadastre turmas em Turmas.';
+    el('estado').textContent = filtradas.length ? `${filtradas.length} aula(s) na grade • Semana recorrente` : 'Nenhuma turma encontrada. Ajuste os filtros ou cadastre turmas em Turmas.';
   }
   async function buscar(caminho) {
     const resposta = await fetch(`${API}${caminho}`, { signal: AbortSignal.timeout(15000) });
@@ -82,7 +81,19 @@
         const dados = await buscar(`/turmas/${encodeURIComponent(curso.id)}`);
         return dados.map(t => ({ ...t, curso_id: curso.id, cursoNome: curso.nome }));
       }));
-      turmas = grupos.flat();
+      // Cada disciplina da grade da turma vira uma aula; turma sem grade aparece uma vez, para revisar
+      turmas = grupos.flat().flatMap(t => {
+        const itens = t.disciplinas && t.disciplinas.length ? t.disciplinas : [null];
+        return itens.map(d => ({
+          ...t,
+          turma_id: t.id,
+          disciplina: d ? d.disciplina : t.disciplina,
+          professor: d ? (d.professor || '') : '',
+          professor_id: d ? d.professor_id : t.professor_id,
+          horario: d ? d.horario : t.horario,
+          sala: d ? d.sala : t.sala
+        }));
+      });
       const cursoSelecionado = el('curso').value;
       const professorSelecionado = el('professor').value;
       el('curso').replaceChildren(new Option('Todos os cursos', ''), ...cursos.map(c => new Option(c.nome, c.id)));

@@ -1,9 +1,15 @@
-// Conecta o backend ao banco de dados Supabase.
 import { createClient } from '@supabase/supabase-js'
 import dotenv from 'dotenv'
-import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-dotenv.config({ path: [resolve('backend/.env'), resolve('.env'), resolve('../.env')], quiet: true })
+// Lê o .env que fica em backend/src/, de qualquer pasta que o servidor seja iniciado.
+// (Antes só funcionava se o terminal estivesse dentro de backend/src.)
+dotenv.config({ path: fileURLToPath(new URL('../.env', import.meta.url)) })
+dotenv.config()
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+)
+
 export default supabase

@@ -1,6 +1,11 @@
 # Dependências
 node_modules/
 
+# Variáveis de ambiente e credenciais
+.env
+.env.*
+!.env.example
+
 # Arquivos de sistema
 .DS_Store
 Thumbs.db
@@ -12,7 +17,3 @@ npm-debug.log*
 # Builds
 dist/
 build/
-**/.env
-**/.env.*
-!**/.env.example
-.netlify/

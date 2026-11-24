@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="../CSS/MENU.CSS" />
   <link rel="stylesheet" href="../CSS/RESPONSIVO.CSS" />
-  <script src="../JS/CONFIG.JS"></script>
+  <script src="../JS/AUTH.JS"></script>
 </head>
 
 <body class="bg-[#f5f5f5] overflow-hidden">
@@ -23,7 +23,7 @@
     <div>
       <div class="bg-[#07224f] text-white px-5 py-5">
         <h1 class="text-[22px] font-bold">SICEP</h1>
-        <p class="text-[10px] tracking-[2px] mt-1 opacity-80">Secretaria</p>
+        <p class="text-[10px] tracking-[2px] mt-1 opacity-80">Sistema Integrado de Controle para Ensino Profissionalizante</p>
       </div>
       <nav class="py-6">
         <h3 class="text-[11px] font-bold tracking-[2px] text-gray-500 uppercase px-6 mb-5">Módulos principais</h3>
@@ -113,22 +113,41 @@
   </main>
 </div>
 
-<!-- MODAL CURSO -->
+<!-- MODAL CURSO (2 abas: dados e disciplinas) -->
 <div id="modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 p-5">
-  <div class="bg-white w-full max-w-[550px] rounded-2xl p-7 max-h-[90vh] overflow-y-auto">
-    <div class="flex items-start justify-between mb-6">
+  <div class="bg-white w-full max-w-[640px] rounded-2xl p-7 max-h-[92vh] overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+    <div class="flex items-start justify-between mb-5">
       <div>
-        <h2 class="text-2xl font-semibold mb-1">Novo curso</h2>
-        <p class="text-gray-500 text-sm">Informe os dados do curso.</p>
+        <h2 id="modalTitulo" class="text-2xl font-semibold mb-1">Novo curso</h2>
+        <p id="modalSub" class="text-gray-500 text-sm">Informe os dados do curso.</p>
       </div>
-      <button id="closeModal" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center">✕</button>
+      <button id="closeModal" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center" aria-label="Fechar">✕</button>
     </div>
 
+    <div role="tablist" class="flex gap-2 border-b border-gray-200 mb-6">
+      <button type="button" role="tab" id="abaDados" data-aba="dados" class="aba-curso px-4 py-3 text-sm font-semibold border-b-[3px] -mb-px">1. Dados do curso</button>
+      <button type="button" role="tab" id="abaDisc" data-aba="disciplinas" class="aba-curso px-4 py-3 text-sm font-semibold border-b-[3px] -mb-px">2. Disciplinas</button>
+    </div>
+
+    <!-- ABA 1 -->
     <form id="cursoForm" class="space-y-5">
       <div><label for="nome" class="text-sm font-medium block mb-2">Nome do curso</label><input type="text" id="nome" required maxlength="150" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]" /></div>
       <div><label for="duracao" class="text-sm font-medium block mb-2">Tempo de dura&#231;&#227;o (horas)</label><input id="duracao" type="number" min="1" step="1" required placeholder="Ex.: 120" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]" /></div>
-      <div class="flex justify-end gap-3 pt-4"><button type="button" id="cancelModal" class="border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50">Cancelar</button><button type="submit" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90">Salvar curso</button></div>
+      <div class="flex justify-end gap-3 pt-4"><button type="button" id="cancelModal" class="border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50">Cancelar</button><button type="submit" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90">Salvar e continuar</button></div>
     </form>
+
+    <!-- ABA 2 -->
+    <div id="painelDisc" class="hidden">
+      <p class="text-sm text-gray-500 mb-4">Cada disciplina é salva assim que você clica em Adicionar.</p>
+      <form id="discForm" class="grid grid-cols-1 sm:grid-cols-[1fr_140px_auto] gap-3 items-end mb-3">
+        <div><label for="discNome" class="text-sm font-medium block mb-2">Disciplina</label><input id="discNome" type="text" required maxlength="150" placeholder="Ex.: Redes de Computadores" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]" /></div>
+        <div><label for="discCarga" class="text-sm font-medium block mb-2">Carga (h)</label><input id="discCarga" type="number" min="1" step="1" placeholder="Ex.: 60" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]" /></div>
+        <div class="flex gap-2"><button type="submit" id="discSalvar" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90 whitespace-nowrap">Adicionar</button><button type="button" id="discCancelar" class="hidden border border-gray-300 px-4 py-3 rounded-lg hover:bg-gray-50">Cancelar</button></div>
+      </form>
+      <p id="discErro" role="alert" class="text-sm text-red-600 mb-3 min-h-[1.25rem]"></p>
+      <ul id="discLista" class="divide-y divide-gray-100 border border-gray-200 rounded-xl"></ul>
+      <div class="flex justify-end pt-6"><button type="button" id="concluirModal" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90">Concluir</button></div>
+    </div>
   </div>
 </div>
 

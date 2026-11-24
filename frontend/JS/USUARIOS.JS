@@ -1,4 +1,6 @@
-const usuarios = window.previaUsuarios.listar();
+const API = String(window.SICEP_API_URL || 'http://localhost:3000').replace(/\/+$/, '');
+let usuarios = [];
+const meuId = window.sicepAuth?.usuario?.id;
 const modalUsuario = document.getElementById('modalUsuario');
 const usuarioForm = document.getElementById('usuarioForm');
 const nomeInput = document.getElementById('nome');
@@ -83,7 +85,7 @@ function abrirUsuario(usuario = null) {
   document.getElementById('senhaAjuda').textContent = usuario ? 'Preencha apenas para alterar a senha. Use pelo menos 8 caracteres.' : 'Use pelo menos 8 caracteres.';
   document.querySelector('label[for="senha"] span').hidden = Boolean(usuario);
   erroMsg.classList.add('hidden');
-  document.getElementById('sucessoMsg').classList.add('hidden');
+  sucessoMsg.classList.add('hidden');
   ocultarSenha();
   modalUsuario.classList.remove('hidden');
   modalUsuario.classList.add('flex');
@@ -117,6 +119,50 @@ mostrarSenha.addEventListener('click', () => {
   mostrarSenha.firstElementChild.className = mostrar ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
 });
 
+// Chamada ao servidor: devolve os dados ou lança um erro com a mensagem do servidor.
+async function chamar(caminho, metodo = 'GET', corpo) {
+  let resposta;
+  try {
+    resposta = await fetch(API + caminho, {
+      method: metodo,
+      headers: { 'Content-Type': 'application/json' },
+      body: corpo ? JSON.stringify(corpo) : undefined
+    });
+  } catch {
+    throw new Error('Não foi possível conectar ao servidor. Verifique se o backend está rodando.');
+  }
+  const dados = await resposta.json().catch(() => ({}));
+  if (!resposta.ok) {
+    const erro = new Error(dados.error || 'Algo deu errado. Tente novamente.');
+    erro.status = resposta.status;
+    throw erro;
+  }
+  return dados;
+}
+
+const listaMsg = document.getElementById('listaMsg');
+const sucessoMsg = document.getElementById('sucessoMsg');
+
+function mostrarErroLista(texto) {
+  listaMsg.textContent = texto;
+  listaMsg.classList.toggle('hidden', !texto);
+}
+
+function mostrarSucesso(texto) {
+  sucessoMsg.textContent = texto;
+  sucessoMsg.classList.remove('hidden');
+}
+
+function criarBotaoAcao(texto, classe, rotulo, aoClicar) {
+  const botao = document.createElement('button');
+  botao.type = 'button';
+  botao.className = classe;
+  botao.textContent = texto;
+  botao.setAttribute('aria-label', rotulo);
+  botao.addEventListener('click', aoClicar);
+  return botao;
+}
+
 function renderizarUsuarios() {
   const busca = buscaUsuarios.value.trim().toLocaleLowerCase('pt-BR');
   const filtrados = usuarios.filter(usuario =>
@@ -128,28 +174,64 @@ function renderizarUsuarios() {
   tabela.replaceChildren();
   filtrados.forEach(usuario => {
     const linha = document.createElement('tr');
-    linha.className = 'hover:bg-gray-50 duration-150';
-    [usuario.nome, usuario.email, cargos[usuario.cargo]].forEach((valor, indice) => {
+    linha.className = `hover:bg-gray-50 duration-150${usuario.ativo ? '' : ' bg-gray-50/60'}`;
+    const souEu = usuario.id === meuId;
+    [usuario.nome + (souEu ? ' (você)' : ''), usuario.email, cargos[usuario.cargo]].forEach((valor, indice) => {
       const celula = document.createElement('td');
-      celula.className = `px-6 py-4 text-sm ${indice === 0 ? 'font-medium text-gray-800' : 'text-gray-600'}`;
+      const cor = !usuario.ativo ? 'text-gray-400' : indice === 0 ? 'font-medium text-gray-800' : 'text-gray-600';
+      celula.className = `px-6 py-4 text-sm ${cor}`;
       celula.textContent = valor;
       linha.append(celula);
     });
+
+    const situacao = document.createElement('td');
+    situacao.className = 'px-6 py-4 text-sm';
+    const selo = document.createElement('span');
+    selo.className = `inline-block rounded-full px-3 py-1 text-xs font-semibold ${usuario.ativo ? 'bg-green-50 text-green-700' : 'bg-gray-200 text-gray-600'}`;
+    selo.textContent = usuario.ativo ? 'Ativo' : 'Inativo';
+    situacao.append(selo);
+    linha.append(situacao);
+
     const acoes = document.createElement('td');
-    acoes.className = 'px-6 py-4 text-sm';
-    const editar = document.createElement('button');
-    editar.type = 'button';
-    editar.className = 'text-[#07224f] font-semibold rounded-md px-3 py-2 hover:bg-gray-100';
-    editar.textContent = 'Editar';
-    editar.setAttribute('aria-label', `Editar ${usuario.nome}`);
-    editar.addEventListener('click', () => abrirUsuario(usuario));
-    acoes.append(editar);
+    acoes.className = 'px-6 py-4 text-sm whitespace-nowrap';
+    acoes.append(criarBotaoAcao('Editar', 'text-[#07224f] font-semibold rounded-md px-3 py-2 hover:bg-gray-100', `Editar ${usuario.nome}`, () => abrirUsuario(usuario)));
+    if (!souEu) {
+      acoes.append(criarBotaoAcao(
+        usuario.ativo ? 'Desativar' : 'Reativar',
+        `font-semibold rounded-md px-3 py-2 hover:bg-gray-100 ${usuario.ativo ? 'text-red-600' : 'text-green-700'}`,
+        `${usuario.ativo ? 'Desativar' : 'Reativar'} ${usuario.nome}`,
+        () => alternarAtivo(usuario)
+      ));
+    }
     linha.append(acoes);
     tabela.append(linha);
   });
 }
 
-usuarioForm.addEventListener('submit', event => {
+async function carregarUsuarios() {
+  try {
+    usuarios = await chamar('/usuarios');
+    mostrarErroLista('');
+  } catch (erro) {
+    usuarios = [];
+    mostrarErroLista(erro.message);
+    if (erro.status === 403) document.getElementById('novoUsuarioBtn').classList.add('hidden');
+  }
+  renderizarUsuarios();
+}
+
+async function alternarAtivo(usuario) {
+  sucessoMsg.classList.add('hidden');
+  try {
+    await chamar(`/usuarios/${usuario.id}/ativo`, 'PATCH', { ativo: !usuario.ativo });
+    await carregarUsuarios();
+    mostrarSucesso(usuario.ativo ? `${usuario.nome} foi desativado e não consegue mais entrar.` : `${usuario.nome} foi reativado.`);
+  } catch (erro) {
+    mostrarErroLista(erro.message);
+  }
+}
+
+usuarioForm.addEventListener('submit', async event => {
   event.preventDefault();
   const nome = nomeInput.value.trim();
   const email = emailInput.value.trim().toLowerCase();
@@ -165,29 +247,39 @@ usuarioForm.addEventListener('submit', event => {
   let erro = '';
   if (!nome) erro = 'Informe o nome do usuário.';
   else if (!Object.hasOwn(cargos, cargo)) erro = 'Selecione um cargo válido.';
-  else if (usuarios.some(usuario => usuario !== usuarioEmEdicao && usuario.email === email)) erro = 'Já existe um usuário com este e-mail nesta sessão.';
   if (erro) {
     erroMsg.textContent = erro;
     erroMsg.classList.remove('hidden');
     return;
   }
-  // Prévia visual: a senha nunca é copiada para a lista ou persistida.
+
   const editando = Boolean(usuarioEmEdicao);
   const dados = { nome, email, cargo };
-  if (professor) Object.assign(dados, { telefone: mascararTelefone(telefone), especialidade });
-  if (usuarioEmEdicao) {
-    delete usuarioEmEdicao.telefone;
-    delete usuarioEmEdicao.especialidade;
-    Object.assign(usuarioEmEdicao, dados);
-  } else usuarios.push(dados);
-  window.previaUsuarios.salvar(usuarios);
+  if (senhaInput.value) dados.senha = senhaInput.value;
+  if (professor) Object.assign(dados, { telefone, especialidade });
+
+  const botaoSalvar = usuarioForm.querySelector('button[type="submit"]');
+  const textoOriginal = botaoSalvar.textContent;
+  botaoSalvar.disabled = true;
+  botaoSalvar.textContent = 'Salvando...';
+  erroMsg.classList.add('hidden');
+
+  try {
+    await chamar(editando ? `/usuarios/${usuarioEmEdicao.id}` : '/usuarios', editando ? 'PUT' : 'POST', dados);
+  } catch (falha) {
+    erroMsg.textContent = falha.message;
+    erroMsg.classList.remove('hidden');
+    botaoSalvar.disabled = false;
+    botaoSalvar.textContent = textoOriginal;
+    return;
+  }
+
+  botaoSalvar.disabled = false;
   fecharCadastro();
   buscaUsuarios.value = '';
-  renderizarUsuarios();
-  const sucesso = document.getElementById('sucessoMsg');
-  sucesso.textContent = editando ? 'Usuário atualizado na prévia desta sessão.' : 'Usuário adicionado à prévia desta sessão.';
-  sucesso.classList.remove('hidden');
+  await carregarUsuarios();
+  mostrarSucesso(editando ? 'Usuário atualizado com sucesso.' : 'Usuário cadastrado com sucesso.');
 });
 buscaUsuarios.addEventListener('input', renderizarUsuarios);
 atualizarCamposProfessor();
-renderizarUsuarios();
+carregarUsuarios();
