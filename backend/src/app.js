@@ -21,7 +21,7 @@ import { exigirLogin } from './auth.js'
 // =========================
 
 dotenv.config({
-  path: fileURLToPath(new URL('.env', import.meta.url))
+  path: ['backend/src/.env', 'backend/.env', 'src/.env', '.env']
 })
 
 dotenv.config()
