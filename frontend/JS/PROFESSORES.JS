@@ -177,6 +177,7 @@
           <button
             type="button"
             data-professor="${escapar(professor.id)}"
+            data-ajuda="prof.btnDetalhes"
             aria-label="Ver detalhes de ${escapar(professor.nome)}"
             class="text-sm font-semibold text-[#07224f] rounded-md px-2 py-2 hover:bg-blue-50"
           >

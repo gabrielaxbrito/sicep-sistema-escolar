@@ -264,6 +264,7 @@
 
     botao.type = 'button';
     botao.id = 'btnSair';
+    botao.dataset.ajuda = 'menu.sair';
 
     botao.className =
       'mt-4 w-full flex items-center justify-center gap-2 text-sm text-gray-600 border border-gray-200 rounded-lg py-2 hover:bg-gray-100 duration-200';

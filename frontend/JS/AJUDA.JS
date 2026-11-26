@@ -24,7 +24,8 @@
  *   GROQ_API_KEY). Este arquivo apenas chama o backend.
  *
  * COMO MANTER (quando o SICEP mudar)
- *   - Mudou o id/botão de uma tela? Ajuste o seletor em ELEMENTOS.
+ *   - Mudou o id/botão de uma tela? Mantenha o atributo data-ajuda="chave" no elemento
+ *     (o seletor em ELEMENTOS é só reserva). Depois rode: node testar-ajuda.mjs
  *   - Quer ensinar um fluxo novo? Crie uma entrada em ROTEIROS.
  *   - Backend em outra porta/endereço? Defina antes deste script:
  *       <script>window.SICEP_API_URL = 'http://meu-servidor:3000'</script>
@@ -61,9 +62,9 @@
   // 2.1 — O que cada página faz (ajuda a IA a responder dúvidas gerais).
   const PAGINAS = {
     'DASHBOARD.HTML':     'Dashboard: indicadores gerais (alunos matriculados, turmas ativas, professores ativos, taxa de ocupação).',
-    'ALUNOS.HTML':        'Alunos: cadastrar, buscar, filtrar, editar, excluir e matricular alunos em turmas.',
-    'CURSOS.HTML':        'Cursos: cadastrar, editar e excluir cursos; abrir as turmas de cada curso.',
-    'TURMAS.HTML':        'Turmas: cadastrar (disciplina, professor, dias, horário, sala, vagas), filtrar por curso e excluir.',
+    'ALUNOS.HTML':        'Alunos: cadastrar, buscar, filtrar, editar e excluir alunos; ver a matrícula e a frequência de cada aluno e matriculá-lo em turmas.',
+    'CURSOS.HTML':        'Cursos: cadastrar, editar e excluir cursos; cadastrar as disciplinas de cada curso; abrir as turmas de cada curso.',
+    'TURMAS.HTML':        'Turmas: cadastrar e editar turmas com a grade de disciplinas (professor, dias, horário e sala de cada uma); filtrar; ver alunos, vagas e frequência; lançar presença; excluir.',
     'DOCUMENTOS.HTML':    'Documentos: emitir declarações e comprovantes em PDF; solicitar certificado de conclusão.',
     'GRADE_HORARIA.HTML': 'Grade Horária: ver a semana de aulas; filtrar por curso, professor, turno ou disciplina; atualizar e imprimir.',
     'PROFESSORES.HTML':   'Professores: consultar o corpo docente, buscar por nome e ver detalhes e turmas.',
@@ -73,14 +74,19 @@
   // 2.2 — O que o sistema AINDA NÃO faz. A IA usa isto para não prometer o
   // que não existe e para orientar a alternativa correta.
   const LIMITACOES = [
-    'Turmas não podem ser editadas: só criadas e excluídas.',
-    'Para cadastrar uma turma é preciso informar o código (ID) numérico do curso e do professor; os nomes aparecem sozinhos depois de digitar o código.',
-    'Ao excluir um curso ou uma turma o navegador pede uma confirmação. Excluir um curso também exclui as turmas dele.',
+    'Uma turma é um grupo de alunos com várias disciplinas (a "grade"). Primeiro cadastre os dados da turma; depois, na etapa "Disciplinas e horários", adicione cada disciplina com professor, dias, horário e sala.',
+    'As disciplinas de uma turma vêm das disciplinas cadastradas no curso. Se o curso ainda não tem disciplinas, cadastre-as antes, no botão "Disciplinas" do card do curso.',
+    'Para cadastrar uma turma é preciso informar o código (ID) numérico do curso; para cada disciplina da grade, o código (ID) do professor. Os nomes aparecem sozinhos depois de digitar o código.',
+    'Uma turma encerrada não exige dias e horário nas disciplinas, e não recebe novas presenças.',
+    'A presença é lançada por disciplina e por data, no botão "Presença" do card da turma. Não aceita data futura. O título e o resumo da aula são opcionais.',
+    'Notas ainda não existem no sistema: a coluna "Nota" da matrícula do aluno aparece vazia.',
+    'Ainda não há botão para cancelar uma matrícula. Por isso uma turma com alunos matriculados não pode ser excluída, e a exclusão de um curso com matrículas pode ser recusada pelo sistema.',
+    'Ao excluir um curso, o sistema avisa que as turmas e disciplinas ligadas a ele também serão excluídas. O navegador pede uma confirmação.',
     'A página Professores é só de consulta. Para cadastrar um professor novo usa-se "Usuário e Permissões" com o cargo "Professor"; nesse módulo os cadastros ficam apenas em uma prévia da sessão do navegador.',
     'Em Documentos, a Declaração de Frequência e o Histórico de Frequência usam o ID da matrícula; os demais documentos usam o ID do aluno.',
     'Em Documentos, "Boletim de Notas", "Grade Horária Individual" e "Comprovante de Conclusão de Módulo" ainda não estão disponíveis para emissão, e a "Declaração de Trancamento" ainda não tem envio integrado.',
     'O item "Processos Acadêmicos" do menu aparece como "Em breve" e ainda não funciona.',
-    'O login ainda não está disponível: o acesso ao sistema é pelo link "Acessar dashboard" da tela inicial.'
+    'O sistema exige login (e-mail e senha). O botão "Sair" fica no menu lateral.'
   ]
 
   // 2.3 — ELEMENTOS: cada item clicável/preenchível que o assistente sabe
@@ -106,7 +112,7 @@
   function definir(prefixo, pagina, itens) {
     for (const nome in itens) {
       const [seletor, rotulo, extra] = itens[nome]
-      ELEMENTOS[prefixo + '.' + nome] = Object.assign({ pagina, seletor, rotulo }, extra)
+      ELEMENTOS[prefixo + '.' + nome] = Object.assign({ chave: prefixo + '.' + nome, pagina, seletor, rotulo }, extra)
     }
   }
 
@@ -120,16 +126,15 @@
     documentos:  ['#sidebar a[href="DOCUMENTOS.HTML"]', 'Menu lateral "Documentos": leva à tela Documentos', { navega: 'DOCUMENTOS.HTML' }],
     grade:       ['#sidebar a[href="GRADE_HORARIA.HTML"]', 'Menu lateral "Grade Horária": leva à tela Grade Horária', { navega: 'GRADE_HORARIA.HTML' }],
     professores: ['#sidebar a[href="PROFESSORES.HTML"]', 'Menu lateral "Professores": leva à tela Professores', { navega: 'PROFESSORES.HTML' }],
-    usuarios:    ['#sidebar a[href="USUARIOS.HTML"]', 'Menu lateral "Usuário e Permissões": leva à tela Usuário e Permissões', { navega: 'USUARIOS.HTML' }]
+    usuarios:    ['#sidebar a[href="USUARIOS.HTML"]', 'Menu lateral "Usuário e Permissões": leva à tela Usuário e Permissões', { navega: 'USUARIOS.HTML' }],
+    sair:        ['#btnSair', 'Botão "Sair" do menu lateral: encerra a sessão e volta para o login']
   })
 
   definir('dash', 'DASHBOARD.HTML', {
-    alunos:      ['main article', 'Indicador "Alunos matriculados" (total de matrículas ativas)', { contem: 'Alunos matriculados' }],
+    alunos:      ['main article', 'Indicador "Alunos ativos" (total de matrículas ativas)', { contem: 'Alunos ativos' }],
     turmas:      ['main article', 'Indicador "Turmas ativas"', { contem: 'Turmas ativas' }],
     professores: ['main article', 'Indicador "Professores ativos"', { contem: 'Professores ativos' }],
-    ocupacao:    ['main article', 'Indicador "Taxa de ocupação" (vagas preenchidas / disponíveis)', { contem: 'Taxa de ocupação' }],
-    // Este link só existe no topo do Dashboard (não nas demais páginas).
-    sair:        ['a[href="../index.html"]', 'Link "Voltar ao login" no topo do Dashboard']
+    ocupacao:    ['main article', 'Indicador "Taxa de ocupação" (vagas preenchidas / disponíveis)', { contem: 'Taxa de ocupação' }]
   })
 
   definir('alunos', 'ALUNOS.HTML', {
@@ -141,7 +146,13 @@
     // Botões das linhas (criados pelo JS da tela). Identificados pelo title.
     btnEditar:          ['#tabelaAlunos button[title="Editar"]', 'Ícone de lápis na linha de um aluno: abre a janela de edição do aluno', { abre: 'alunos.form' }],
     btnExcluir:         ['#tabelaAlunos button[title="Excluir"]', 'Ícone de lixeira na linha de um aluno: abre a confirmação de exclusão', { abre: 'alunos.excluir' }],
-    btnMatricular:      ['#tabelaAlunos button[title="Matricular em turma"]', 'Ícone de capelo na linha de um aluno: abre a janela de matrícula em turma', { abre: 'alunos.matricula' }],
+    btnVisao:           ['#tabelaAlunos button[title="Matrícula e frequência"]', 'Ícone de capelo na linha de um aluno: abre a visão geral do aluno (dados pessoais, cursos, matrículas e frequência)', { abre: 'alunos.visao' }],
+    abaDados:           ['#abaDados', 'Aba "Dados Pessoais" da visão do aluno', { janela: 'alunos.visao', avancar: 'click' }],
+    abaCursos:          ['#abaCursos', 'Aba "Cursos e Matrículas" da visão do aluno: lista os cursos dele', { janela: 'alunos.visao', avancar: 'click' }],
+    visaoLista:         ['#visaoLista', 'Lista de cursos do aluno; o botão + de cada curso mostra período, frequência, status e as disciplinas com professor, frequência e nota', { janela: 'alunos.visao', avancar: 'manual' }],
+    visaoMais:          ['#visaoLista button', 'Botão + / − de um curso do aluno: abre ou esconde os detalhes (período, frequência, status, disciplinas)', { janela: 'alunos.visao', avancar: 'click' }],
+    visaoNovaMatricula: ['#visaoNovaMatricula', 'Botão "Nova matrícula" na visão do aluno: abre a janela de matrícula em turma', { janela: 'alunos.visao', abre: 'alunos.matricula', fecha: true }],
+    visaoFechar:        ['#closeModalVisao', 'Botão X que fecha a visão do aluno', { janela: 'alunos.visao', fecha: true }],
     nome:               ['#nome', 'Campo Nome (janela do formulário de aluno)', { janela: 'alunos.form' }],
     cpf:                ['#cpf', 'Campo CPF (janela do formulário de aluno)', { janela: 'alunos.form' }],
     status:             ['#status', 'Campo Status Ativo/Inativo (janela do formulário de aluno)', { janela: 'alunos.form' }],
@@ -149,37 +160,68 @@
     salvar:             ['#submitBtn', 'Botão de salvar/cadastrar (janela do formulário de aluno)', { janela: 'alunos.form', fecha: true }],
     confirmarExcluir:   ['#confirmarExcluir', 'Botão "Excluir" que confirma a exclusão (janela de confirmação)', { janela: 'alunos.excluir', fecha: true }],
     matriculaCurso:     ['#matriculaCursoId', 'Seletor de curso (janela de matrícula)', { janela: 'alunos.matricula' }],
-    matriculaTurma:     ['#matriculaTurmaId', 'Seletor de turma, só carrega depois de escolher o curso (janela de matrícula)', { janela: 'alunos.matricula' }],
+    matriculaTurma:     ['#matriculaTurmaId', 'Seletor de turma (mostra código, disciplinas e vagas livres), só carrega depois de escolher o curso (janela de matrícula)', { janela: 'alunos.matricula' }],
     confirmarMatricula: ['#confirmarMatricula', 'Botão "Matricular" (janela de matrícula)', { janela: 'alunos.matricula', fecha: true }]
   })
 
   definir('cursos', 'CURSOS.HTML', {
     novo:        ['#novoCursoBtn', 'Botão "Novo curso": abre a janela de cadastro de curso', { abre: 'cursos.form' }],
-    lista:       ['#cardsContainer', 'Lista de cursos cadastrados (um card por curso)'],
+    lista:       ['#cardsContainer', 'Lista de cursos cadastrados (um card por curso, com a quantidade de disciplinas)'],
     btnEditar:   ['#cardsContainer button', 'Botão "Editar curso" no card de um curso: abre a janela de edição', { contem: 'Editar curso', abre: 'cursos.form' }],
+    btnDisciplinas: ['#cardsContainer button', 'Botão "Disciplinas" no card de um curso: abre a janela direto na aba de disciplinas do curso', { contem: 'Disciplinas', abre: 'cursos.disciplinas' }],
     btnExcluir:  ['#cardsContainer button', 'Botão "Excluir curso" no card de um curso (o navegador pede confirmação)', { contem: 'Excluir curso' }],
     btnVerTurmas:['#cardsContainer a', 'Link "Ver turmas" no card de um curso: leva à tela Turmas filtrada por esse curso', { contem: 'Ver turmas', navega: 'TURMAS.HTML' }],
     nome:        ['#nome', 'Campo Nome do curso (janela do formulário de curso)', { janela: 'cursos.form' }],
     duracao:     ['#duracao', 'Campo Tempo de duração em horas (janela do formulário de curso)', { janela: 'cursos.form' }],
-    salvar:      ['#cursoForm [type="submit"]', 'Botão de salvar o curso (janela do formulário de curso)', { janela: 'cursos.form', fecha: true }]
+    salvar:      ['#cursoForm [type="submit"]', 'Botão "Salvar e continuar" do curso: salva e passa para a aba de disciplinas (janela do formulário de curso)', { janela: 'cursos.form', abre: 'cursos.disciplinas' }],
+    abaDisc:     ['#abaDisc', 'Aba "2. Disciplinas" da janela do curso', { janela: 'cursos.form', avancar: 'click' }],
+    discNome:    ['#discNome', 'Campo Nome da disciplina (aba de disciplinas do curso)', { janela: 'cursos.disciplinas' }],
+    discCarga:   ['#discCarga', 'Campo Carga horária da disciplina, em horas (aba de disciplinas do curso)', { janela: 'cursos.disciplinas' }],
+    discSalvar:  ['#discSalvar', 'Botão "Adicionar" disciplina ao curso (aba de disciplinas do curso)', { janela: 'cursos.disciplinas' }],
+    discLista:   ['#discLista', 'Lista das disciplinas do curso, com Editar e Excluir em cada uma (aba de disciplinas do curso)', { janela: 'cursos.disciplinas', avancar: 'manual' }],
+    concluir:    ['#concluirModal', 'Botão "Concluir": fecha a janela do curso (aba de disciplinas do curso)', { janela: 'cursos.disciplinas', fecha: true }]
   })
 
   definir('turmas', 'TURMAS.HTML', {
     nova:         ['#novaTurmaBtn', 'Botão "Nova turma": abre a janela de cadastro de turma', { abre: 'turmas.form' }],
+    resumo:       ['#totalTurmas', 'Cartão com o total de turmas e o de professores nas turmas', { avancar: 'manual' }],
     filtroCurso:  ['#filtroCurso', 'Filtro da lista de turmas por curso'],
-    lista:        ['#cardsContainer', 'Lista de turmas cadastradas (professor, horário, sala, vagas)'],
-    btnExcluir:   ['#cardsContainer button', 'Botão "Excluir turma" no card de uma turma (o navegador pede confirmação)', { contem: 'Excluir turma' }],
-    cursoId:      ['#curso_id', 'Campo Código (ID) do curso (janela de turma)', { janela: 'turmas.form' }],
-    codigo:       ['#codigo', 'Campo Código da turma (janela de turma)', { janela: 'turmas.form' }],
-    disciplina:   ['#disciplina', 'Campo Disciplina (janela de turma)', { janela: 'turmas.form' }],
-    professorId:  ['#professor_id', 'Campo Código (ID) do professor (janela de turma)', { janela: 'turmas.form' }],
-    dias:         ['#turmaForm fieldset', 'Dias da semana das aulas (janela de turma)', { janela: 'turmas.form' }],
-    horaInicio:   ['#horaInicio', 'Campo horário de início (janela de turma)', { janela: 'turmas.form' }],
-    horaFim:      ['#horaFim', 'Campo horário de término (janela de turma)', { janela: 'turmas.form' }],
-    sala:         ['#sala', 'Campo Sala (janela de turma)', { janela: 'turmas.form' }],
-    vagas:        ['#qtd_vagas_turmas', 'Campo Quantidade de vagas (janela de turma)', { janela: 'turmas.form' }],
-    status:       ['#status', 'Campo Status Ativa/Encerrada (janela de turma)', { janela: 'turmas.form' }],
-    salvar:       ['#turmaForm [type="submit"]', 'Botão "Criar turma" (janela de turma)', { janela: 'turmas.form', fecha: true }]
+    filtroProfessor: ['#filtroProfessor', 'Filtro da lista de turmas por professor'],
+    filtroTurno:  ['#filtroTurno', 'Filtro da lista de turmas por turno (manhã, tarde, noite)'],
+    filtroBusca:  ['#filtroBusca', 'Busca de turma por disciplina ou código da turma'],
+    lista:        ['#cardsContainer', 'Lista de turmas (um card por turma, com vagas, frequência e as disciplinas)'],
+    toggle:       ['#cardsContainer .turma-grade-toggle', 'Botão + / − do card da turma: mostra ou esconde as disciplinas da turma', { avancar: 'click' }],
+    btnAlunos:    ['#cardsContainer button', 'Botão "Alunos" no card da turma: abre a lista de alunos com vagas livres e frequência', { contem: 'Alunos', abre: 'turmas.alunos' }],
+    btnPresenca:  ['#cardsContainer button', 'Botão "Presença" no card da turma: abre a janela de lançar presença', { contem: 'Presença', abre: 'turmas.presenca' }],
+    btnGrade:     ['#cardsContainer button', 'Botão "Grade" no card da turma: abre direto a aba de disciplinas e horários da turma', { contem: 'Grade', abre: 'turmas.grade' }],
+    btnEditar:    ['#cardsContainer button', 'Botão "Editar" no card da turma: abre a janela de edição dos dados da turma', { contem: 'Editar', abre: 'turmas.form' }],
+    btnExcluir:   ['#cardsContainer button', 'Botão "Excluir" no card da turma (o navegador pede confirmação)', { contem: 'Excluir' }],
+    cursoId:      ['#curso_id', 'Campo Código (ID) do curso (aba 1 da janela de turma)', { janela: 'turmas.form' }],
+    codigo:       ['#codigo', 'Campo Código da turma (aba 1 da janela de turma)', { janela: 'turmas.form' }],
+    vagas:        ['#qtd_vagas_turmas', 'Campo Quantidade de vagas (aba 1 da janela de turma)', { janela: 'turmas.form' }],
+    status:       ['#status', 'Campo Status Ativa/Encerrada (aba 1 da janela de turma)', { janela: 'turmas.form' }],
+    salvar:       ['#turmaForm [type="submit"]', 'Botão "Salvar e continuar": salva a turma e passa para a aba de disciplinas e horários (aba 1 da janela de turma)', { janela: 'turmas.form', abre: 'turmas.grade' }],
+    abaGrade:     ['#abaTurmaGrade', 'Aba "2. Disciplinas e horários" da janela de turma', { janela: 'turmas.form', avancar: 'click' }],
+    gradeDisciplina: ['#gradeDisciplina', 'Seletor da disciplina da turma, com as disciplinas do curso (aba de disciplinas e horários)', { janela: 'turmas.grade' }],
+    professorId:  ['#professor_id', 'Campo Código (ID) do professor da disciplina; o nome aparece ao lado (aba de disciplinas e horários)', { janela: 'turmas.grade' }],
+    dias:         ['#gradeForm fieldset', 'Dias da semana, horário de início e de término da disciplina (aba de disciplinas e horários)', { janela: 'turmas.grade', avancar: 'manual' }],
+    sala:         ['#sala', 'Campo Sala da disciplina (aba de disciplinas e horários)', { janela: 'turmas.grade' }],
+    gradeSalvar:  ['#gradeSalvar', 'Botão "Adicionar" disciplina à turma (aba de disciplinas e horários)', { janela: 'turmas.grade' }],
+    gradeLista:   ['#gradeLista', 'Lista das disciplinas já adicionadas à turma, com Editar e Excluir (aba de disciplinas e horários)', { janela: 'turmas.grade', avancar: 'manual' }],
+    concluir:     ['#concluirTurma', 'Botão "Concluir": fecha a janela da turma (aba de disciplinas e horários)', { janela: 'turmas.grade', fecha: true }],
+    atBusca:      ['#atBusca', 'Pesquisa de aluno por nome ou e-mail (janela Alunos da turma)', { janela: 'turmas.alunos' }],
+    atData:       ['#atData', 'Filtro por data da aula: mostra presenças e faltas só daquele dia (janela Alunos da turma)', { janela: 'turmas.alunos' }],
+    atResumo:     ['#modalAlunosTurma .resumo-lateral', 'Cartões Vagas, Ocupadas, Livres e Frequência total da turma (janela Alunos da turma)', { janela: 'turmas.alunos', avancar: 'manual' }],
+    atTabela:     ['#modalAlunosTurma table', 'Tabela de alunos da turma com situação, presenças, faltas e frequência (janela Alunos da turma)', { janela: 'turmas.alunos', avancar: 'manual' }],
+    atFechar:     ['#closeAlunosTurma', 'Botão X que fecha a janela Alunos da turma', { janela: 'turmas.alunos', fecha: true }],
+    presDisciplina: ['#presencaDisciplina', 'Seletor da disciplina da aula (janela Lançar presença)', { janela: 'turmas.presenca' }],
+    presData:     ['#presencaData', 'Data da aula, com calendário; não aceita data futura (janela Lançar presença)', { janela: 'turmas.presenca' }],
+    presTitulo:   ['#presencaTituloAula', 'Título da aula, opcional (janela Lançar presença)', { janela: 'turmas.presenca', avancar: 'manual' }],
+    presConteudo: ['#presencaConteudoAula', 'Resumo do que foi dado na aula, opcional (janela Lançar presença)', { janela: 'turmas.presenca', avancar: 'manual' }],
+    presBusca:    ['#presencaBusca', 'Pesquisa de aluno por nome na chamada (janela Lançar presença)', { janela: 'turmas.presenca', avancar: 'manual' }],
+    presTodos:    ['#presencaTodos', 'Botões "Todos presentes" / "Todos ausentes" da chamada (janela Lançar presença)', { janela: 'turmas.presenca', avancar: 'manual' }],
+    presLista:    ['#presencaConteudo table', 'Tabela da chamada: desmarque quem faltou (janela Lançar presença)', { janela: 'turmas.presenca', avancar: 'manual' }],
+    presSalvar:   ['#presencaSalvar', 'Botão "Salvar presença" (janela Lançar presença)', { janela: 'turmas.presenca', fecha: true }]
   })
 
   // Documentos de emissão imediata: um card + um modal compartilhado.
@@ -258,9 +300,14 @@
   const JANELAS = {
     'alunos.form':       { teste: 'alunos.nome',            padrao: 'alunos.novo',          texto: 'Clique em "Novo aluno" para abrir o formulário.' },
     'alunos.excluir':    { teste: 'alunos.confirmarExcluir', padrao: 'alunos.btnExcluir',    texto: 'Clique no ícone de lixeira na linha do aluno.' },
-    'alunos.matricula':  { teste: 'alunos.matriculaCurso',  padrao: 'alunos.btnMatricular', texto: 'Clique no ícone de capelo (matricular) na linha do aluno.' },
+    'alunos.visao':      { teste: 'alunos.abaCursos',       padrao: 'alunos.btnVisao',      texto: 'Clique no ícone de capelo (matrícula e frequência) na linha do aluno.' },
+    'alunos.matricula':  { teste: 'alunos.matriculaCurso',  padrao: 'alunos.visaoNovaMatricula', texto: 'Clique em "Nova matrícula".' },
     'cursos.form':       { teste: 'cursos.nome',            padrao: 'cursos.novo',          texto: 'Clique em "Novo curso" para abrir o formulário.' },
+    'cursos.disciplinas':{ teste: 'cursos.discNome',        padrao: 'cursos.btnDisciplinas', texto: 'Clique em "Disciplinas" no card do curso.' },
     'turmas.form':       { teste: 'turmas.cursoId',         padrao: 'turmas.nova',          texto: 'Clique em "Nova turma" para abrir o formulário.' },
+    'turmas.grade':      { teste: 'turmas.gradeDisciplina', padrao: 'turmas.btnGrade',      texto: 'Clique em "Grade" no card da turma.' },
+    'turmas.alunos':     { teste: 'turmas.atTabela',        padrao: 'turmas.btnAlunos',     texto: 'Clique em "Alunos" no card da turma.' },
+    'turmas.presenca':   { teste: 'turmas.presDisciplina',  padrao: 'turmas.btnPresenca',   texto: 'Clique em "Presença" no card da turma.' },
     'usuarios.form':     { teste: 'usuarios.nome',          padrao: 'usuarios.novo',        texto: 'Clique em "Novo usuário" para abrir o formulário.' },
     'docs.certificacao': { teste: 'docs.certId',            padrao: 'docs.cardCertificado', texto: 'Clique no card "Certificado de Conclusão".' },
     // Sem "padrao": existem 5 cards de documento; só a IA sabe qual a pessoa quer.
@@ -335,13 +382,27 @@
     aluno_matricular: {
       titulo: 'Matricular um aluno em uma turma',
       descricao: 'matricular, inscrever ou colocar um aluno em um curso/turma',
-      palavras: ['matricular aluno', 'matricula aluno', 'inscrever aluno', 'colocar aluno turma', 'matricular turma', 'matricular curso'],
+      palavras: ['matricular aluno', 'matricula aluno', 'inscrever aluno', 'colocar aluno turma', 'matricular turma', 'matricular curso', 'nova matricula'],
       passos: [
         ['alunos.busca',              'Localize o aluno que será matriculado.'],
-        ['alunos.btnMatricular',      'Clique no ícone de capelo (matricular) na linha do aluno. Estou destacando o da primeira linha como exemplo.'],
+        ['alunos.btnVisao',           'Clique no ícone de capelo (matrícula e frequência) na linha do aluno. Estou destacando o da primeira linha como exemplo.'],
+        ['alunos.abaCursos',          'Abra a aba "Cursos e Matrículas".'],
+        ['alunos.visaoNovaMatricula', 'Clique em "Nova matrícula".'],
         ['alunos.matriculaCurso',     'Escolha o curso.'],
-        ['alunos.matriculaTurma',     'Escolha a turma (a lista aparece depois que o curso é escolhido).'],
+        ['alunos.matriculaTurma',     'Escolha a turma (a lista aparece depois que o curso é escolhido; turmas lotadas ou encerradas ficam desabilitadas).'],
         ['alunos.confirmarMatricula', 'Clique em "Matricular" para concluir.']
+      ]
+    },
+    aluno_ver_matricula: {
+      titulo: 'Ver a matrícula e a frequência de um aluno',
+      descricao: 'ver os cursos, a matrícula, a frequência ou as disciplinas de um aluno específico (visão geral do aluno)',
+      palavras: ['ver matricula aluno', 'frequencia do aluno', 'cursos do aluno', 'visao do aluno', 'dados do aluno', 'frequencia de um aluno', 'matricula do aluno'],
+      passos: [
+        ['alunos.busca',      'Localize o aluno. Use a busca se a lista for grande.'],
+        ['alunos.btnVisao',   'Clique no ícone de capelo (matrícula e frequência) na linha do aluno. Estou destacando o da primeira linha como exemplo.'],
+        ['alunos.abaCursos',  'Abra a aba "Cursos e Matrículas".'],
+        ['alunos.visaoMais',  'Clique no + do curso para ver período, frequência, status e as disciplinas com professor, frequência e nota.'],
+        ['alunos.visaoLista', 'Aqui está o resumo dos cursos do aluno.', 'manual']
       ]
     },
     alunos_ver: {
@@ -358,13 +419,18 @@
     // ── CURSOS ────────────────────────────────────────────────────────────
     curso_cadastrar: {
       titulo: 'Cadastrar um curso',
-      descricao: 'cadastrar, criar, adicionar ou registrar um novo curso',
+      descricao: 'cadastrar, criar, adicionar ou registrar um novo curso (e, em seguida, as disciplinas dele)',
       palavras: ['cadastrar curso', 'novo curso', 'criar curso', 'adicionar curso', 'registrar curso', 'incluir curso'],
+      aviso: 'O cadastro tem 2 etapas: primeiro os dados do curso, depois as disciplinas dele (necessárias para montar as turmas).',
       passos: [
-        ['cursos.novo',    'Clique em "Novo curso" para abrir o formulário.'],
-        ['cursos.nome',    'Digite o nome do curso.'],
-        ['cursos.duracao', 'Informe o tempo de duração do curso, em horas.'],
-        ['cursos.salvar',  'Clique em "Salvar curso" para concluir.']
+        ['cursos.novo',      'Clique em "Novo curso" para abrir o formulário.'],
+        ['cursos.nome',      'Digite o nome do curso.'],
+        ['cursos.duracao',   'Informe o tempo de duração do curso, em horas.'],
+        ['cursos.salvar',    'Clique em "Salvar e continuar". O curso é salvo e abre a aba de disciplinas.'],
+        ['cursos.discNome',  'Digite o nome da primeira disciplina do curso.'],
+        ['cursos.discCarga', 'Informe a carga horária da disciplina, em horas.'],
+        ['cursos.discSalvar','Clique em "Adicionar". Repita para as outras disciplinas.'],
+        ['cursos.concluir',  'Quando terminar de adicionar as disciplinas, clique em "Concluir".']
       ]
     },
     curso_editar: {
@@ -375,14 +441,28 @@
         ['cursos.btnEditar', 'Clique em "Editar curso" no card do curso desejado. Estou destacando o primeiro como exemplo.'],
         ['cursos.nome',      'Altere o nome, se precisar.', 'manual'],
         ['cursos.duracao',   'Altere a duração, se precisar.', 'manual'],
-        ['cursos.salvar',    'Clique em "Salvar alterações" para confirmar.']
+        ['cursos.salvar',    'Clique em "Salvar e continuar" para confirmar.'],
+        ['cursos.concluir',  'Na aba de disciplinas, clique em "Concluir" para fechar a janela.']
+      ]
+    },
+    curso_disciplinas: {
+      titulo: 'Cadastrar as disciplinas de um curso',
+      descricao: 'cadastrar, adicionar, editar ou excluir as disciplinas (matérias) de um curso',
+      palavras: ['cadastrar disciplina', 'nova disciplina', 'criar disciplina', 'adicionar disciplina', 'incluir disciplina', 'disciplinas do curso', 'disciplinas curso', 'cadastrar materia'],
+      passos: [
+        ['cursos.btnDisciplinas', 'Clique em "Disciplinas" no card do curso. Estou destacando o primeiro como exemplo.'],
+        ['cursos.discNome',       'Digite o nome da disciplina.'],
+        ['cursos.discCarga',      'Informe a carga horária da disciplina, em horas.'],
+        ['cursos.discSalvar',     'Clique em "Adicionar". Repita para as outras disciplinas.'],
+        ['cursos.discLista',      'As disciplinas do curso aparecem aqui. Cada uma tem Editar e Excluir.', 'manual'],
+        ['cursos.concluir',       'Clique em "Concluir" para fechar a janela.']
       ]
     },
     curso_excluir: {
       titulo: 'Excluir um curso',
       descricao: 'excluir, apagar, deletar ou remover um curso',
       palavras: ['excluir curso', 'apagar curso', 'deletar curso', 'remover curso'],
-      aviso: 'Atenção: ao excluir um curso, as turmas vinculadas a ele também são excluídas. O navegador vai pedir uma confirmação.',
+      aviso: 'Atenção: as turmas e disciplinas ligadas ao curso também serão excluídas. O navegador vai pedir uma confirmação, e se houver alunos matriculados o sistema pode recusar a exclusão.',
       passos: [
         ['cursos.btnExcluir', 'Clique em "Excluir curso" no card do curso desejado e confirme na janela do navegador. Estou destacando o primeiro como exemplo.']
       ]
@@ -409,41 +489,100 @@
     // ── TURMAS ────────────────────────────────────────────────────────────
     turma_cadastrar: {
       titulo: 'Cadastrar uma turma',
-      descricao: 'cadastrar, criar, adicionar ou abrir uma nova turma para um curso',
+      descricao: 'cadastrar, criar, adicionar ou abrir uma nova turma para um curso, com as disciplinas e horários dela',
       palavras: ['cadastrar turma', 'nova turma', 'criar turma', 'adicionar turma', 'registrar turma', 'abrir turma', 'incluir turma'],
-      aviso: 'Dica: tenha em mãos o código (ID) do curso e do professor. Os nomes aparecem sozinhos depois que você digita o código.',
+      aviso: 'O cadastro tem 2 etapas: dados da turma e, depois, as disciplinas com professor e horário. Tenha em mãos o código (ID) do curso e o do professor de cada disciplina. O curso precisa ter disciplinas cadastradas.',
       passos: [
-        ['turmas.nova',        'Clique em "Nova turma" para abrir o formulário.'],
-        ['turmas.cursoId',     'Digite o código (ID) do curso. O nome dele aparece ao lado.'],
-        ['turmas.codigo',      'Digite o código da turma.'],
-        ['turmas.disciplina',  'Informe a disciplina.'],
-        ['turmas.professorId', 'Digite o código (ID) do professor responsável.'],
-        ['turmas.dias',        'Marque os dias da semana em que haverá aula e clique em Avançar.'],
-        ['turmas.horaInicio',  'Informe o horário de início das aulas.'],
-        ['turmas.horaFim',     'Informe o horário de término das aulas.'],
-        ['turmas.sala',        'Informe a sala. Exemplo: Bloco A - Sala 12.'],
-        ['turmas.vagas',       'Informe a quantidade de vagas.'],
-        ['turmas.status',      'Escolha o status da turma: Ativa ou Encerrada.'],
-        ['turmas.salvar',      'Clique em "Criar turma" para concluir.']
+        ['turmas.nova',            'Clique em "Nova turma" para abrir o formulário.'],
+        ['turmas.cursoId',         'Digite o código (ID) do curso. O nome dele aparece ao lado.'],
+        ['turmas.codigo',          'Digite o código da turma.'],
+        ['turmas.vagas',           'Informe a quantidade de vagas.'],
+        ['turmas.status',          'Escolha o status da turma: Ativa ou Encerrada.'],
+        ['turmas.salvar',          'Clique em "Salvar e continuar". A turma é salva e abre a aba de disciplinas e horários.'],
+        ['turmas.gradeDisciplina', 'Escolha a primeira disciplina da turma.'],
+        ['turmas.professorId',     'Digite o código (ID) do professor dessa disciplina.'],
+        ['turmas.dias',            'Marque os dias da semana e informe o horário de início e de término. Numa turma encerrada isso é opcional.'],
+        ['turmas.sala',            'Se quiser, informe a sala (opcional). Exemplo: Bloco A - Sala 12.', 'manual'],
+        ['turmas.gradeSalvar',     'Clique em "Adicionar". Repita para as outras disciplinas da turma.'],
+        ['turmas.concluir',        'Quando terminar, clique em "Concluir".']
+      ]
+    },
+    turma_editar: {
+      titulo: 'Editar uma turma',
+      descricao: 'editar, alterar ou atualizar o código, as vagas ou o status de uma turma',
+      palavras: ['editar turma', 'alterar turma', 'atualizar turma', 'modificar turma', 'corrigir turma', 'encerrar turma', 'mudar vagas'],
+      passos: [
+        ['turmas.filtroBusca', 'Se precisar, procure a turma pelo código ou pela disciplina.', 'manual'],
+        ['turmas.btnEditar',   'Clique em "Editar" no card da turma. Estou destacando o primeiro como exemplo.'],
+        ['turmas.codigo',      'Altere o código, se precisar.', 'manual'],
+        ['turmas.vagas',       'Altere a quantidade de vagas, se precisar.', 'manual'],
+        ['turmas.status',      'Altere o status (Ativa ou Encerrada), se precisar.', 'manual'],
+        ['turmas.salvar',      'Clique em "Salvar e continuar" para confirmar.'],
+        ['turmas.concluir',    'Clique em "Concluir" para fechar a janela.']
+      ]
+    },
+    turma_grade: {
+      titulo: 'Montar ou editar as disciplinas e horários de uma turma',
+      descricao: 'adicionar, editar ou remover as disciplinas, professores, dias, horários e salas da grade de uma turma',
+      palavras: ['grade da turma', 'disciplinas da turma', 'horarios da turma', 'adicionar disciplina turma', 'trocar professor', 'mudar horario', 'alterar horario', 'mudar sala', 'montar grade'],
+      passos: [
+        ['turmas.btnGrade',        'Clique em "Grade" no card da turma. Estou destacando o primeiro como exemplo.'],
+        ['turmas.gradeDisciplina', 'Escolha a disciplina que será adicionada.'],
+        ['turmas.professorId',     'Digite o código (ID) do professor.'],
+        ['turmas.dias',            'Marque os dias da semana e informe o horário de início e de término.'],
+        ['turmas.sala',            'Se quiser, informe a sala (opcional).', 'manual'],
+        ['turmas.gradeSalvar',     'Clique em "Adicionar".'],
+        ['turmas.gradeLista',      'As disciplinas da turma aparecem aqui. Cada uma tem Editar e Excluir.', 'manual'],
+        ['turmas.concluir',        'Clique em "Concluir" para fechar a janela.']
       ]
     },
     turma_excluir: {
       titulo: 'Excluir uma turma',
       descricao: 'excluir, apagar, deletar ou remover uma turma',
       palavras: ['excluir turma', 'apagar turma', 'deletar turma', 'remover turma'],
-      aviso: 'O navegador vai pedir uma confirmação antes de excluir.',
+      aviso: 'O navegador vai pedir uma confirmação. Uma turma com alunos matriculados não pode ser excluída.',
       passos: [
-        ['turmas.filtroCurso', 'Se quiser, filtre pelo curso da turma.'],
-        ['turmas.btnExcluir',  'Clique em "Excluir turma" no card da turma desejada e confirme. Estou destacando o primeiro como exemplo.']
+        ['turmas.filtroCurso', 'Se quiser, filtre pelo curso da turma.', 'manual'],
+        ['turmas.btnExcluir',  'Clique em "Excluir" no card da turma desejada e confirme. Estou destacando o primeiro como exemplo.']
       ]
     },
     turmas_ver: {
-      titulo: 'Ver as turmas cadastradas',
-      descricao: 'ver, listar ou filtrar as turmas cadastradas; abrir a página de turmas',
+      titulo: 'Ver e filtrar as turmas',
+      descricao: 'ver, listar ou filtrar as turmas cadastradas por curso, professor, turno, disciplina ou código; abrir a página de turmas',
       palavras: ['ver turmas', 'listar turmas', 'lista turmas', 'mostrar turmas', 'visualizar turmas', 'pagina turmas', 'filtrar turmas'],
       passos: [
-        ['turmas.filtroCurso', 'Escolha um curso para ver só as turmas dele, ou deixe "Todos os cursos".'],
-        ['turmas.lista',       'As turmas aparecem aqui, com professor, horário, sala e vagas.', 'manual']
+        ['turmas.filtroCurso',     'Escolha um curso para ver só as turmas dele, ou deixe "Todos".', 'manual'],
+        ['turmas.filtroProfessor', 'Se quiser, filtre por professor.', 'manual'],
+        ['turmas.filtroTurno',     'Se quiser, filtre por turno.', 'manual'],
+        ['turmas.filtroBusca',     'Ou procure por disciplina ou código da turma.', 'manual'],
+        ['turmas.lista',           'As turmas aparecem aqui, com vagas, frequência e as disciplinas. O botão + / − mostra ou esconde as disciplinas.', 'manual']
+      ]
+    },
+    turma_alunos: {
+      titulo: 'Ver os alunos, as vagas e a frequência de uma turma',
+      descricao: 'ver os alunos matriculados numa turma, as vagas livres e ocupadas e a frequência total da turma',
+      palavras: ['alunos da turma', 'alunos turma', 'vagas livres', 'vagas turma', 'frequencia turma', 'frequencia da turma', 'quantos alunos turma', 'lista de alunos da turma'],
+      passos: [
+        ['turmas.btnAlunos', 'Clique em "Alunos" no card da turma. Estou destacando o primeiro como exemplo.'],
+        ['turmas.atResumo',  'Aqui estão as vagas, as ocupadas, as livres e a frequência total da turma.', 'manual'],
+        ['turmas.atTabela',  'Estes são os alunos matriculados, com presenças, faltas e frequência de cada um.', 'manual'],
+        ['turmas.atBusca',   'Pesquise um aluno por nome ou e-mail.', 'manual'],
+        ['turmas.atData',    'Escolha uma data de aula para ver as presenças e faltas só daquele dia.', 'manual']
+      ]
+    },
+    turma_presenca: {
+      titulo: 'Lançar a presença de uma aula',
+      descricao: 'lançar, registrar ou fazer a chamada (presença e faltas) de uma aula de uma disciplina numa data',
+      palavras: ['lancar presenca', 'registrar presenca', 'fazer chamada', 'chamada', 'presenca turma', 'marcar presenca', 'dar presenca', 'lancar falta', 'registrar falta', 'lancar frequencia'],
+      aviso: 'A presença é lançada por disciplina e por data. Não é possível lançar em data futura nem em turma encerrada.',
+      passos: [
+        ['turmas.btnPresenca',   'Clique em "Presença" no card da turma. Estou destacando o primeiro como exemplo.'],
+        ['turmas.presDisciplina','Escolha a disciplina da aula.'],
+        ['turmas.presData',      'Escolha a data da aula (já vem a de hoje).'],
+        ['turmas.presTitulo',    'Se quiser, escreva o título da aula.', 'manual'],
+        ['turmas.presConteudo',  'Se quiser, escreva um resumo do que foi dado.', 'manual'],
+        ['turmas.presLista',     'Todos começam como presentes: desmarque quem faltou. Os botões acima da tabela marcam todos de uma vez.', 'manual'],
+        ['turmas.presSalvar',    'Clique em "Salvar presença" para concluir.']
       ]
     },
 
@@ -639,11 +778,11 @@
       ]
     },
     sistema_sair: {
-      titulo: 'Voltar para a tela de login',
-      descricao: 'sair do sistema ou voltar para a tela de login',
-      palavras: ['sair sistema', 'voltar login', 'tela login', 'deslogar', 'logout', 'fazer logoff'],
+      titulo: 'Sair do sistema',
+      descricao: 'sair do sistema, encerrar a sessão ou voltar para a tela de login',
+      palavras: ['sair sistema', 'voltar login', 'tela login', 'deslogar', 'logout', 'fazer logoff', 'encerrar sessao'],
       passos: [
-        ['dash.sair', 'Clique em "Voltar ao login" para sair desta área.']
+        ['menu.sair', 'Clique em "Sair" no menu lateral para encerrar a sessão.']
       ]
     }
   })
@@ -681,6 +820,17 @@
 
   // Encontra o primeiro elemento VISÍVEL que casa com a definição do catálogo.
   function resolverElemento(def) {
+    // 1) A MARCA na tela (data-ajuda="chave") é a fonte da verdade: vale mesmo
+    //    que o id, o texto ou a posição do botão mudem.
+    if (def.chave) {
+      let marcados = []
+      try { marcados = Array.from(document.querySelectorAll('[data-ajuda="' + def.chave + '"]')) } catch (e) { /* ok */ }
+      const achado = marcados.find(renderizavel)
+      if (achado) return achado
+      if (marcados.length) return null   // existe, mas está escondido (modal fechado etc.)
+    }
+
+    // 2) Reserva: o seletor CSS antigo (telas ainda sem marca).
     let candidatos
     try { candidatos = Array.from(document.querySelectorAll(def.seletor)) } catch (e) { return null }
 
@@ -791,7 +941,25 @@
       // 2) Janela (modal) que precisa estar aberta para este passo.
       if (def.janela && !abertas.has(def.janela)) {
         const janela = JANELAS[def.janela]
-        if (janela && janela.padrao) {
+
+        // Janela aberta por um botão de dentro de outra janela (ex.: "Salvar e
+        // continuar" leva da aba 1 para a aba 2)? Então o caminho certo é esse
+        // botão, não o "padrão" (que seria voltar à lista e abrir de novo).
+        const ponte = Object.keys(ELEMENTOS).find(k => {
+          const d = ELEMENTOS[k]
+          return d.abre === def.janela && d.janela && abertas.has(d.janela) &&
+                 (d.pagina === '*' || d.pagina === pagina)
+        })
+
+        if (ponte) {
+          const nome = (ELEMENTOS[ponte].rotulo.match(/"([^"]+)"/) || [])[1]
+          saida.push({
+            el: ponte,
+            texto: nome ? 'Clique em "' + nome + '" para salvar e seguir para a próxima etapa.' : 'Clique neste botão para seguir para a próxima etapa.'
+          })
+          abertas.delete(ELEMENTOS[ponte].janela)
+          abertas.add(def.janela)
+        } else if (janela && janela.padrao) {
           saida.push({ el: janela.padrao, texto: janela.texto })
           abertas.add(def.janela)
         }
@@ -842,6 +1010,48 @@
     if (/(^|_)ver|detalhes/.test(chave)) return 'ver'
     if (/^doc_|imprimir/.test(chave)) return 'emitir'
     return null
+  }
+
+  // ── Navegação direta: "ir para alunos", "me leve às turmas", "turmas" ──
+  const SINONIMOS_PAGINA = [
+    ['GRADE_HORARIA.HTML', ['grade horaria', 'grade de horarios', 'horarios']],
+    ['USUARIOS.HTML',      ['usuario e permissoes', 'usuarios', 'usuario', 'permissoes', 'permissao']],
+    ['DASHBOARD.HTML',     ['dashboard', 'painel', 'pagina inicial', 'tela inicial', 'inicio', 'home']],
+    ['PROFESSORES.HTML',   ['professores', 'professor']],
+    ['DOCUMENTOS.HTML',    ['documentos', 'documento', 'declaracoes']],
+    ['ALUNOS.HTML',        ['alunos', 'aluno', 'estudantes']],
+    ['CURSOS.HTML',        ['cursos', 'curso']],
+    ['TURMAS.HTML',        ['turmas', 'turma']]
+  ]
+  const VERBO_DE_ACAO = /\b(cadastr\w*|cri(ar|e)|nov[oa]s?|adicion\w*|edit\w*|alter\w*|atualiz\w*|exclu\w*|apag\w*|delet\w*|remov\w*|matricul\w*|lanc\w*|regist\w*|emit\w*|imprim\w*|busc\w*|filtr\w*|pesquis\w*|encerr\w*|como|quero fazer)\b/
+
+  function identificarDestino(mensagem) {
+    const t = normalizar(mensagem)
+    if (!t || VERBO_DE_ACAO.test(t)) return null
+
+    const pedeIr =
+      /\b(ir|va|vai|vamos|leve|leva|levar|acessar|acesse|navegar|navegue|entrar|entre)\b/.test(t) ||
+      /\b(abrir|abra|mostrar|mostre)\b.*\b(tela|pagina|menu)\b/.test(t) ||
+      /\b(tela|pagina) (de|do|da|dos|das)\b/.test(t)
+
+    // Só o nome da tela ("turmas", "página de cursos") também vale.
+    const resto = t.replace(/\b(a|o|as|os|de|do|da|dos|das|para|pra|na|no|nas|nos|ate|tela|pagina|menu|ir|va|vai|me|leve|leva)\b/g, ' ').replace(/\s+/g, ' ').trim()
+
+    for (const [pagina, nomes] of SINONIMOS_PAGINA) {
+      for (const nome of nomes) {
+        if (pedeIr && new RegExp('(^| )' + nome + '( |$)').test(t)) return pagina
+        if (resto === nome) return pagina
+      }
+    }
+    return null
+  }
+
+  function resultadoDeDestino(pagina, confirmacao) {
+    return {
+      tipo: 'ir',
+      destino: pagina,
+      confirmacao: String(confirmacao || ('Quer que eu te leve para a tela "' + NOME_PAGINA[pagina] + '"?')).slice(0, 300)
+    }
   }
 
   function identificarLocal(mensagem) {
@@ -1194,7 +1404,7 @@
     elBtn.setAttribute('aria-expanded', 'true')
 
     if (elMsgs.children.length === 0 && !semSaudacao) {
-      addBot('Olá! 👋 Como posso te ajudar hoje?\n\nPosso te guiar em qualquer ação do sistema: basta me dizer o que você quer fazer.')
+      addBot('Olá! 👋 Como posso te ajudar hoje?\n\nPosso te guiar em qualquer ação do sistema ou te levar direto a qualquer tela: basta me dizer o que você quer fazer.')
       mostrarSugestoes()
     }
     setTimeout(() => elInput.focus(), 150)
@@ -1245,7 +1455,7 @@
 
   // Atalhos de exemplo na primeira abertura.
   function mostrarSugestoes() {
-    const exemplos = ['Cadastrar um aluno', 'Criar um novo curso', 'Cadastrar uma turma', 'Emitir declaração de curso']
+    const exemplos = ['Cadastrar um aluno', 'Cadastrar uma turma', 'Lançar presença', 'Ir para Cursos']
     const caixa = document.createElement('div')
     caixa.className = 'ajuda-sugestoes'
     exemplos.forEach(texto => {
@@ -1288,11 +1498,9 @@
 
   function catalogoParaIA() {
     return {
-      paginas:   Object.keys(PAGINAS).map(p => p + ' (itens "' + PREFIXO_DA_PAGINA[p] + '.*"): ' + PAGINAS[p]),
-      // "(janela do formulário de aluno)" vira "(janela aluno)": mesmo sentido, menos tokens.
-      elementos: Object.keys(ELEMENTOS).map(chave =>
-        chave + ' | ' + ELEMENTOS[chave].rotulo.replace(/\(janela (?:do formulário de |de |do )?/, '(janela ')),
-      roteiros:  Object.keys(ROTEIROS).map(chave => chave + ' | ' + ROTEIROS[chave].titulo),
+      paginas:   Object.keys(PAGINAS).map(p => p + ': ' + PAGINAS[p]),
+      // A IA só ESCOLHE entre roteiros prontos: não recebe mais a lista de elementos.
+      roteiros:  Object.keys(ROTEIROS).map(chave => chave + ' | ' + ROTEIROS[chave].titulo + ' | ' + (ROTEIROS[chave].descricao || '')),
       limitacoes: LIMITACOES
     }
   }
@@ -1344,20 +1552,10 @@
     // "entendi" é a frase em que a própria IA resume o objetivo da pessoa.
     const entendi = String(json.entendi || '').trim().slice(0, 120)
 
-    // 1) PLANO PRÓPRIO da IA: o caminho montado sob medida para o pedido.
-    //    Só passam passos cujas chaves existem no catálogo real.
-    if (Array.isArray(json.passos) && json.passos.length) {
-      const passos = json.passos
-        .filter(p => p && typeof p.el === 'string' && ELEMENTOS[p.el])
-        .slice(0, 15)
-        .map(p => ({ el: p.el, texto: String(p.texto || ELEMENTOS[p.el].rotulo).slice(0, 220) }))
-
-      if (passos.length) {
-        return {
-          tipo: 'guia', titulo: entendi || 'Guia personalizado', passos, aviso: '',
-          confirmacao: String(json.confirmacao || ('Você quer ' + (entendi || 'fazer isso') + '. Posso te guiar passo a passo?')).slice(0, 300)
-        }
-      }
+    // 0) A pessoa só quer ir para uma tela.
+    if (json.tipo === 'ir') {
+      const pagina = String(json.destino || '').toUpperCase()
+      if (NOME_PAGINA[pagina]) return resultadoDeDestino(pagina, json.confirmacao)
     }
 
     // 2) A IA indicou um roteiro pronto (tarefa padrão e exata).
@@ -1365,10 +1563,10 @@
       return guiaDeRoteiro(json.roteiro, json.confirmacao)
     }
 
-    // 3) Disse "guia", mas nada do que veio existe no sistema. Em vez de forçar
-    //    um fluxo parecido (erro clássico), admite e pede para reformular.
+    // 3) Disse "guia", mas não indicou um roteiro que exista. Em vez de inventar
+    //    passos ou forçar um fluxo parecido, admite e pede para reformular.
     if (json.tipo === 'guia') {
-      return { tipo: 'resposta', resposta: 'Entendi o que você quer, mas não consegui montar o caminho na tela. Pode me explicar de outro jeito?' }
+      return { tipo: 'resposta', resposta: 'Entendi o que você quer, mas ainda não tenho um passo a passo exato para isso. Pode me explicar de outro jeito?' }
     }
 
     // 4) Resposta em texto.
@@ -1407,10 +1605,16 @@
     addCarregando()
 
     let resultado
-    try {
-      resultado = interpretar(await perguntarIA(mensagem))
-    } catch (erro) {
-      resultado = alternativaSemIA(mensagem, erro)
+    const destinoLocal = identificarDestino(mensagem)
+    if (destinoLocal) {
+      // Pedido simples de navegação: resolve aqui, sem gastar a IA.
+      resultado = resultadoDeDestino(destinoLocal)
+    } else {
+      try {
+        resultado = interpretar(await perguntarIA(mensagem))
+      } catch (erro) {
+        resultado = alternativaSemIA(mensagem, erro)
+      }
     }
 
     removerCarregando()
@@ -1449,8 +1653,17 @@
   function mostrarResultado(r) {
     if (r.avisoIA) addBot(r.avisoIA)
 
-    if (r.tipo === 'guia') {
+    if (r.tipo === 'ir' && r.destino === paginaAtual()) {
+      const msg = 'Você já está na tela "' + NOME_PAGINA[r.destino] + '". Quer que eu te ajude a fazer algo aqui?'
+      addBot(msg)
+      lembrar('assistant', msg)
+      return
+    }
+
+    if (r.tipo === 'guia' || r.tipo === 'ir') {
       guiaPendente = r
+      elSim.textContent = r.tipo === 'ir' ? 'Ir agora' : 'Sim, pode guiar!'
+      elNao.textContent = r.tipo === 'ir' ? 'Agora não' : 'Não, outra coisa'
       elConfirmaTxt.textContent = r.confirmacao
       elConfirma.style.display = 'flex'
       lembrar('assistant', r.confirmacao)
@@ -1476,6 +1689,15 @@
     const g = guiaPendente
     guiaPendente = null
     elConfirma.style.display = 'none'
+
+    if (g.tipo === 'ir') {
+      addBot('Levando você para "' + NOME_PAGINA[g.destino] + '"... 🚀')
+      setTimeout(() => {
+        fecharPainel()
+        location.href = location.href.replace(/[?#].*$/, '').replace(/[^/]*$/, '') + g.destino
+      }, 400)
+      return
+    }
 
     if (g.aviso) addBot(g.aviso)
     addBot('Perfeito! Vou destacar na tela onde clicar. Siga os destaques em azul. ✨')

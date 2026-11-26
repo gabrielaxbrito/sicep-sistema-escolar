@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="../CSS/MENU.CSS" />
   <link rel="stylesheet" href="../CSS/RESPONSIVO.CSS" />
+  <script src="../JS/CONFIG.JS"></script>
   <script src="../JS/AUTH.JS"></script>
 </head>
 
@@ -29,37 +30,37 @@
         <h3 class="text-[11px] font-bold tracking-[2px] text-gray-500 uppercase px-6 mb-5">Módulos principais</h3>
         <ul class="space-y-1">
           <li>
-            <a href="DASHBOARD.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="DASHBOARD.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.dashboard">
               <i class="fa-solid fa-table-columns w-5"></i><span>Dashboard</span>
             </a>
           </li>
           <li>
-            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]">
+            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]" data-ajuda="menu.alunos">
               <i class="fa-regular fa-user w-5"></i><span>Alunos</span>
             </a>
           </li>
-          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
-          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
+          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.cursos"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
+          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.turmas"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
           <li>
             <span aria-disabled="true" title="Em breve" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-400 cursor-not-allowed"><i class="fa-regular fa-folder w-5"></i><span>Processos Acadêmicos</span><span class="text-[10px]">Em breve</span></span>
           </li>
           <li>
-            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.documentos">
               <i class="fa-regular fa-file-lines w-5"></i><span>Documentos</span>
             </a>
           </li>
           <li>
-            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.grade">
               <i class="fa-regular fa-calendar w-5"></i><span>Grade Horária</span>
             </a>
           </li>
           <li>
-            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.professores">
               <i class="fa-solid fa-users w-5"></i><span>Professores</span>
             </a>
           </li>
           <li>
-            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.usuarios">
               <i class="fa-solid fa-user-shield w-5"></i><span>Usuário e Permissões</span>
             </a>
           </li>
@@ -86,7 +87,7 @@
     <!-- TOPBAR -->
     <header class="h-[95px] bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-10 flex-shrink-0">
       <div class="flex items-center gap-4">
-        <button id="menuBtn" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100">
+        <button id="menuBtn" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100" data-ajuda="menu.abrir">
           <i class="fa-solid fa-bars text-lg"></i>
         </button>
         <div>
@@ -94,7 +95,7 @@
           <h2 class="text-lg md:text-[22px] font-semibold">Alunos</h2>
         </div>
       </div>
-      <button id="novoAlunoBtn" class="bg-[#07224f] hover:opacity-90 duration-200 text-white px-6 py-3 rounded-md text-sm flex items-center justify-center gap-3">
+      <button id="novoAlunoBtn" class="bg-[#07224f] hover:opacity-90 duration-200 text-white px-6 py-3 rounded-md text-sm flex items-center justify-center gap-3" data-ajuda="alunos.novo">
         <i class="fa-solid fa-plus"></i>Novo aluno
       </button>
     </header>
@@ -107,9 +108,9 @@
         <div class="relative flex-1">
           <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
           <input id="buscaInput" type="text" placeholder="Buscar por nome, CPF ou e-mail..."
-            class="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 text-sm outline-none focus:border-[#07224f]" />
+            class="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 text-sm outline-none focus:border-[#07224f]"  data-ajuda="alunos.busca"/>
         </div>
-        <select id="filtroStatus" class="border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white outline-none focus:border-[#07224f] md:w-48">
+        <select id="filtroStatus" class="border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white outline-none focus:border-[#07224f] md:w-48" data-ajuda="alunos.filtroStatus">
           <option value="">Todos os status</option>
           <option value="ativo">Ativo</option>
           <option value="inativo">Inativo</option>
@@ -117,7 +118,7 @@
       </div>
 
       <!-- CONTADOR -->
-      <p id="totalAlunos" class="text-sm text-gray-500 mb-4"></p>
+      <p id="totalAlunos" class="text-sm text-gray-500 mb-4" data-ajuda="alunos.total"></p>
 
       <!-- ESTADOS -->
       <div id="loadingState" class="flex flex-col items-center justify-center py-24 gap-4">
@@ -141,7 +142,7 @@
       </div>
 
       <!-- TABELA -->
-      <div id="tableWrapper" class="hidden bg-white rounded-2xl border border-gray-200 overflow-hidden">
+      <div id="tableWrapper" class="hidden bg-white rounded-2xl border border-gray-200 overflow-hidden" data-ajuda="alunos.lista">
         <table class="w-full text-left">
           <thead>
             <tr class="border-b border-[#07224f] bg-[#07224f]">
@@ -178,18 +179,18 @@
       <div>
         <label class="text-sm font-medium block mb-2">Nome completo <span class="text-red-500">*</span></label>
         <input type="text" id="nome" required
-          class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]" />
+          class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]"  data-ajuda="alunos.nome"/>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
           <label class="text-sm font-medium block mb-2">CPF</label>
           <input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14"
-            class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f] font-mono" />
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f] font-mono"  data-ajuda="alunos.cpf"/>
         </div>
         <div>
           <label class="text-sm font-medium block mb-2">Status</label>
-          <select id="status" class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white outline-none focus:border-[#07224f]">
+          <select id="status" class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white outline-none focus:border-[#07224f]" data-ajuda="alunos.status">
             <option value="ativo">Ativo</option>
             <option value="inativo">Inativo</option>
           </select>
@@ -199,12 +200,12 @@
       <div>
         <label class="text-sm font-medium block mb-2">E-mail <span class="text-red-500">*</span></label>
         <input type="email" id="email" required
-          class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]" />
+          class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]"  data-ajuda="alunos.email"/>
       </div>
 
       <div class="flex justify-end gap-3 pt-4">
         <button type="button" id="cancelModal" class="border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50">Cancelar</button>
-        <button type="submit" id="submitBtn" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90">
+        <button type="submit" id="submitBtn" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90" data-ajuda="alunos.salvar">
           <span id="submitLabel">Cadastrar Aluno</span>
         </button>
       </div>
@@ -224,7 +225,7 @@
     <p class="text-xs text-gray-400 mb-6">Esta ação não pode ser desfeita. As matrículas do aluno também serão removidas.</p>
     <div class="flex gap-3 justify-center">
       <button id="cancelExcluir" class="border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 flex-1">Cancelar</button>
-      <button id="confirmarExcluir" class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 flex-1">Excluir</button>
+      <button id="confirmarExcluir" class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 flex-1" data-ajuda="alunos.confirmarExcluir">Excluir</button>
     </div>
   </div>
 </div>
@@ -239,12 +240,12 @@
         <h2 id="visaoNome" class="text-2xl font-semibold"></h2>
         <p id="visaoContato" class="text-sm text-gray-500 mt-1"></p>
       </div>
-      <button id="closeModalVisao" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center" aria-label="Fechar">✕</button>
+      <button id="closeModalVisao" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center" aria-label="Fechar" data-ajuda="alunos.visaoFechar">✕</button>
     </div>
 
     <div role="tablist" class="flex gap-2 border-b border-gray-200 mb-6">
-      <button type="button" role="tab" id="abaDados" data-aba="dados" class="aba-visao px-5 py-3 text-base font-semibold border-b-[3px] -mb-px">Dados Pessoais</button>
-      <button type="button" role="tab" id="abaCursos" data-aba="cursos" class="aba-visao px-5 py-3 text-base font-semibold border-b-[3px] -mb-px">Cursos e Matrículas</button>
+      <button type="button" role="tab" id="abaDados" data-aba="dados" class="aba-visao px-5 py-3 text-base font-semibold border-b-[3px] -mb-px" data-ajuda="alunos.abaDados">Dados Pessoais</button>
+      <button type="button" role="tab" id="abaCursos" data-aba="cursos" class="aba-visao px-5 py-3 text-base font-semibold border-b-[3px] -mb-px" data-ajuda="alunos.abaCursos">Cursos e Matrículas</button>
     </div>
 
     <div id="visaoCarregando" class="text-sm text-gray-500 py-10 text-center">Carregando...</div>
@@ -265,9 +266,9 @@
     <div id="painelCursos" role="tabpanel" class="hidden border border-gray-200 rounded-2xl p-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-xl font-semibold text-gray-900">Cursos <span id="visaoQtd" class="text-sm font-normal text-gray-500"></span></h3>
-        <button id="visaoNovaMatricula" type="button" class="bg-[#07224f] text-white text-sm px-4 py-2 rounded-lg hover:opacity-90"><i class="fa-solid fa-plus mr-2"></i>Nova matrícula</button>
+        <button id="visaoNovaMatricula" type="button" class="bg-[#07224f] text-white text-sm px-4 py-2 rounded-lg hover:opacity-90" data-ajuda="alunos.visaoNovaMatricula"><i class="fa-solid fa-plus mr-2"></i>Nova matrícula</button>
       </div>
-      <div id="visaoLista" class="border border-gray-200 rounded-xl divide-y divide-gray-200 overflow-hidden"></div>
+      <div id="visaoLista" class="border border-gray-200 rounded-xl divide-y divide-gray-200 overflow-hidden" data-ajuda="alunos.visaoLista"></div>
     </div>
   </div>
 </div>
@@ -287,13 +288,13 @@
     <div class="space-y-5">
       <div>
         <label class="text-sm font-medium block mb-2">Curso <span class="text-red-500">*</span></label>
-        <select id="matriculaCursoId" class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white outline-none focus:border-[#07224f]">
+        <select id="matriculaCursoId" class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white outline-none focus:border-[#07224f]" data-ajuda="alunos.matriculaCurso">
           <option value="">Selecione um curso</option>
         </select>
       </div>
       <div>
         <label class="text-sm font-medium block mb-2">Turma <span class="text-red-500">*</span></label>
-        <select id="matriculaTurmaId" class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white outline-none focus:border-[#07224f]">
+        <select id="matriculaTurmaId" class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white outline-none focus:border-[#07224f]" data-ajuda="alunos.matriculaTurma">
           <option value="">Selecione primeiro um curso</option>
         </select>
       </div>
@@ -301,7 +302,7 @@
 
     <div class="flex justify-end gap-3 pt-6">
       <button id="cancelMatricula" class="border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50">Cancelar</button>
-      <button id="confirmarMatricula" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90">Matricular</button>
+      <button id="confirmarMatricula" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90" data-ajuda="alunos.confirmarMatricula">Matricular</button>
     </div>
   </div>
 </div>

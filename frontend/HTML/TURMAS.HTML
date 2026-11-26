@@ -18,6 +18,7 @@
   </style>
   <link rel="stylesheet" href="../CSS/TURMAS.CSS" />
   <link rel="stylesheet" href="../CSS/RESPONSIVO.CSS" />
+  <script src="../JS/CONFIG.JS"></script>
   <script src="../JS/AUTH.JS"></script>
 </head>
 
@@ -35,37 +36,37 @@
         <h3 class="text-[11px] font-bold tracking-[2px] text-gray-500 uppercase px-6 mb-5">Módulos principais</h3>
         <ul class="space-y-1">
           <li>
-            <a href="DASHBOARD.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="DASHBOARD.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.dashboard">
               <i class="fa-solid fa-table-columns w-5"></i><span>Dashboard</span>
             </a>
           </li>
           <li>
-            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.alunos">
               <i class="fa-regular fa-user w-5"></i><span>Alunos</span>
             </a>
           </li>
-          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
-          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
+          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.cursos"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
+          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]" data-ajuda="menu.turmas"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
           <li>
             <span aria-disabled="true" title="Em breve" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-400 cursor-not-allowed"><i class="fa-regular fa-folder w-5"></i><span>Processos Acadêmicos</span><span class="text-[10px]">Em breve</span></span>
           </li>
           <li>
-            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.documentos">
               <i class="fa-regular fa-file-lines w-5"></i><span>Documentos</span>
             </a>
           </li>
           <li>
-            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.grade">
               <i class="fa-regular fa-calendar w-5"></i><span>Grade Horária</span>
             </a>
           </li>
           <li>
-            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.professores">
               <i class="fa-solid fa-users w-5"></i><span>Professores</span>
             </a>
           </li>
           <li>
-            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.usuarios">
               <i class="fa-solid fa-user-shield w-5"></i><span>Usuário e Permissões</span>
             </a>
           </li>
@@ -92,7 +93,7 @@
     <!-- TOPBAR -->
     <header class="h-[95px] bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-10 flex-shrink-0">
       <div class="flex items-center gap-4">
-        <button id="menuBtn" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100">
+        <button id="menuBtn" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100" data-ajuda="menu.abrir">
           <i class="fa-solid fa-bars text-lg"></i>
         </button>
         <div>
@@ -100,7 +101,7 @@
           <h2 class="text-lg md:text-[22px] font-semibold">Turmas</h2>
         </div>
       </div>
-      <button id="novaTurmaBtn" class="bg-[#07224f] hover:opacity-90 duration-200 text-white px-6 py-3 rounded-md text-sm flex items-center justify-center gap-3">
+      <button id="novaTurmaBtn" class="bg-[#07224f] hover:opacity-90 duration-200 text-white px-6 py-3 rounded-md text-sm flex items-center justify-center gap-3" data-ajuda="turmas.nova">
         <i class="fa-solid fa-plus"></i>Nova turma
       </button>
     </header>
@@ -112,17 +113,17 @@
       <p class="text-sm text-gray-500 mt-2">Consulte, filtre e edite as turmas da oferta acadêmica.</p>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6" aria-label="Resumo das turmas">
-      <div class="summary"><span>Turmas encontradas</span><strong id="totalTurmas">&mdash;</strong></div>
+      <div class="summary"><span>Turmas encontradas</span><strong id="totalTurmas" data-ajuda="turmas.resumo">&mdash;</strong></div>
       <div class="summary"><span>Professores</span><strong id="totalProfessores">&mdash;</strong></div>
     </div>
     <form id="filtros" class="bg-white border border-gray-200 rounded-xl p-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6" aria-label="Filtrar turmas">
-      <div><label for="filtroCurso">Curso</label><select id="filtroCurso"><option value="">Todos os cursos</option></select></div>
-      <div><label for="filtroProfessor">Professor</label><select id="filtroProfessor"><option value="">Todos os professores</option></select></div>
-      <div><label for="filtroTurno">Turno</label><select id="filtroTurno"><option value="">Todos os turnos</option><option value="manha">Manhã</option><option value="tarde">Tarde</option><option value="noite">Noite</option></select></div>
-      <div><label for="filtroBusca">Disciplina ou turma</label><input id="filtroBusca" type="search" placeholder="Buscar disciplina ou código..." /></div>
+      <div><label for="filtroCurso">Curso</label><select id="filtroCurso" data-ajuda="turmas.filtroCurso"><option value="">Todos os cursos</option></select></div>
+      <div><label for="filtroProfessor">Professor</label><select id="filtroProfessor" data-ajuda="turmas.filtroProfessor"><option value="">Todos os professores</option></select></div>
+      <div><label for="filtroTurno">Turno</label><select id="filtroTurno" data-ajuda="turmas.filtroTurno"><option value="">Todos os turnos</option><option value="manha">Manhã</option><option value="tarde">Tarde</option><option value="noite">Noite</option></select></div>
+      <div><label for="filtroBusca">Disciplina ou turma</label><input id="filtroBusca" type="search" placeholder="Buscar disciplina ou código..."  data-ajuda="turmas.filtroBusca"/></div>
     </form>
     <p id="mensagemTurmas" role="status" aria-live="polite" class="text-sm text-gray-500 mb-4"></p>
-    <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5"></div>
+    <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5" data-ajuda="turmas.lista"></div>
     </section>
 
   </main>
@@ -144,17 +145,17 @@
 
       <div class="md:col-start-1 md:row-start-1 space-y-3">
         <div><label for="presencaDisciplina" class="block text-xs text-gray-500 mb-1">Disciplina</label>
-          <select id="presencaDisciplina" class="w-full border border-gray-300 bg-white rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f]"></select></div>
+          <select id="presencaDisciplina" class="w-full border border-gray-300 bg-white rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f]" data-ajuda="turmas.presDisciplina"></select></div>
         <div><label for="presencaData" class="block text-xs text-gray-500 mb-1">Data da aula</label>
-          <input id="presencaData" type="date" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f]" /></div>
+          <input id="presencaData" type="date" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f]"  data-ajuda="turmas.presData"/></div>
         <div><label for="presencaTituloAula" class="block text-xs text-gray-500 mb-1">Título da aula <span class="text-gray-400">(opcional)</span></label>
-          <input id="presencaTituloAula" type="text" maxlength="150" placeholder="Ex.: Introdução a funções" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f]" /></div>
+          <input id="presencaTituloAula" type="text" maxlength="150" placeholder="Ex.: Introdução a funções" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f]"  data-ajuda="turmas.presTitulo"/></div>
         <div><label for="presencaConteudoAula" class="block text-xs text-gray-500 mb-1">O que foi dado <span class="text-gray-400">(opcional)</span></label>
-          <textarea id="presencaConteudoAula" rows="5" maxlength="2000" placeholder="Resumo do conteúdo, exercícios, avisos…" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f] resize-none"></textarea></div>
+          <textarea id="presencaConteudoAula" rows="5" maxlength="2000" placeholder="Resumo do conteúdo, exercícios, avisos…" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#07224f] resize-none" data-ajuda="turmas.presConteudo"></textarea></div>
         <p id="presencaAulaAviso" class="hidden text-xs text-amber-700"></p>
         <div class="flex gap-2 pt-1">
           <button type="button" id="presencaCancelar" class="flex-1 border border-gray-300 px-4 py-2.5 rounded-lg text-sm hover:bg-gray-100">Fechar</button>
-          <button type="button" id="presencaSalvar" class="flex-1 bg-[#07224f] text-white px-4 py-2.5 rounded-lg text-sm hover:opacity-90 disabled:opacity-50">Salvar presença</button>
+          <button type="button" id="presencaSalvar" class="flex-1 bg-[#07224f] text-white px-4 py-2.5 rounded-lg text-sm hover:opacity-90 disabled:opacity-50" data-ajuda="turmas.presSalvar">Salvar presença</button>
         </div>
       </div>
 
@@ -172,15 +173,15 @@
             <div class="flex flex-wrap items-center gap-3 mb-3">
               <div class="relative flex-1 min-w-[180px]">
                 <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                <input id="presencaBusca" type="search" placeholder="Pesquisar aluno por nome" aria-label="Pesquisar aluno" class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#07224f]/30 focus:border-[#07224f]">
+                <input id="presencaBusca" type="search" placeholder="Pesquisar aluno por nome" aria-label="Pesquisar aluno" class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#07224f]/30 focus:border-[#07224f]" data-ajuda="turmas.presBusca">
               </div>
               <div class="flex gap-2 shrink-0">
-                <button type="button" id="presencaTodos" class="border border-gray-300 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 whitespace-nowrap">Todos presentes</button>
+                <button type="button" id="presencaTodos" class="border border-gray-300 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 whitespace-nowrap" data-ajuda="turmas.presTodos">Todos presentes</button>
                 <button type="button" id="presencaNenhum" class="border border-gray-300 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 whitespace-nowrap">Todos ausentes</button>
               </div>
             </div>
             <div class="overflow-auto border border-gray-200 rounded-none max-h-[300px] md:max-h-none md:flex-1 md:min-h-0">
-              <table class="w-full text-sm">
+              <table class="w-full text-sm" data-ajuda="turmas.presLista">
                 <thead class="bg-[#07224f] text-xs uppercase text-white sticky top-0"><tr>
                   <th scope="col" class="text-left px-4 py-3">Aluno</th><th scope="col" class="text-center px-4 py-3 w-40">Presença</th>
                 </tr></thead>
@@ -219,7 +220,7 @@
         <h2 id="alunosTurmaTitulo" class="text-2xl font-semibold"></h2>
         <p id="alunosTurmaSub" class="text-sm text-gray-500 mt-1"></p>
       </div>
-      <button id="closeAlunosTurma" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center" aria-label="Fechar">✕</button>
+      <button id="closeAlunosTurma" class="text-gray-400 hover:text-black text-lg w-8 h-8 flex items-center justify-center" aria-label="Fechar" data-ajuda="turmas.atFechar">✕</button>
     </div>
     <div id="alunosTurmaCarregando" class="text-sm text-gray-500 py-10 text-center">Carregando...</div>
     <div id="alunosTurmaErro" class="hidden bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-3"></div>
@@ -233,10 +234,10 @@
 
         <label class="md:col-start-1 md:row-start-1 flex items-center gap-2 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 focus-within:ring-2 focus-within:ring-[#07224f]/30 focus-within:border-[#07224f]">
           <span class="whitespace-nowrap">Data da aula</span>
-          <input id="atData" type="date" aria-label="Data da aula" class="min-w-0 flex-1 bg-transparent text-sm text-gray-800 outline-none">
+          <input id="atData" type="date" aria-label="Data da aula" class="min-w-0 flex-1 bg-transparent text-sm text-gray-800 outline-none" data-ajuda="turmas.atData">
         </label>
 
-        <div class="md:col-start-1 md:row-start-2 resumo-lateral grid grid-cols-2 md:grid-cols-1 gap-2 content-start">
+        <div class="md:col-start-1 md:row-start-2 resumo-lateral grid grid-cols-2 md:grid-cols-1 gap-2 content-start" data-ajuda="turmas.atResumo">
           <div class="summary"><span>Vagas</span><strong id="atVagas">—</strong></div>
           <div class="summary"><span>Ocupadas</span><strong id="atOcupadas">—</strong></div>
           <div class="summary"><span>Livres</span><strong id="atLivres">—</strong></div>
@@ -250,12 +251,12 @@
 
         <div class="md:col-start-2 md:row-start-1 relative">
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-          <input id="atBusca" type="search" placeholder="Pesquisar aluno por nome ou e-mail" aria-label="Pesquisar aluno" class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#07224f]/30 focus:border-[#07224f]">
+          <input id="atBusca" type="search" placeholder="Pesquisar aluno por nome ou e-mail" aria-label="Pesquisar aluno" class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#07224f]/30 focus:border-[#07224f]" data-ajuda="turmas.atBusca">
         </div>
 
         <div class="md:col-start-2 md:row-start-2 md:relative min-w-0">
           <div class="overflow-auto border border-gray-200 rounded-none max-h-[260px] md:max-h-none md:absolute md:inset-0">
-            <table class="w-full text-sm">
+            <table class="w-full text-sm" data-ajuda="turmas.atTabela">
               <thead class="bg-[#07224f] text-xs uppercase text-white sticky top-0"><tr>
                 <th scope="col" class="text-left px-4 py-3">Aluno</th><th scope="col" class="text-center px-4 py-3">Situação</th>
                 <th scope="col" class="text-center px-4 py-3">Presenças</th><th scope="col" class="text-center px-4 py-3">Faltas</th><th scope="col" class="text-center px-4 py-3">Frequência</th>
@@ -284,7 +285,7 @@
 
     <div role="tablist" class="flex gap-2 border-b border-gray-200 mb-6">
       <button type="button" role="tab" id="abaTurmaDados" data-aba="dados" class="aba-turma px-4 py-3 text-sm font-semibold border-b-[3px] -mb-px">1. Dados da turma</button>
-      <button type="button" role="tab" id="abaTurmaGrade" data-aba="grade" class="aba-turma px-4 py-3 text-sm font-semibold border-b-[3px] -mb-px">2. Disciplinas e horários</button>
+      <button type="button" role="tab" id="abaTurmaGrade" data-aba="grade" class="aba-turma px-4 py-3 text-sm font-semibold border-b-[3px] -mb-px" data-ajuda="turmas.abaGrade">2. Disciplinas e horários</button>
     </div>
 
     <!-- ABA 1 -->
@@ -293,7 +294,7 @@
         <div>
           <label for="curso_id" class="block text-sm font-medium mb-2">Código do curso</label>
           <input type="number" id="curso_id" placeholder="Ex: 1" required
-            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f] read-only:bg-gray-100" />
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f] read-only:bg-gray-100"  data-ajuda="turmas.cursoId"/>
         </div>
         <div>
           <label for="curso_nome" class="block text-sm font-medium mb-2">Curso</label>
@@ -307,19 +308,19 @@
         <div>
           <label for="codigo" class="block text-sm font-medium mb-2">Código da turma</label>
           <input type="text" id="codigo" required placeholder="Ex: PED-2026-NOITE"
-            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]" />
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]"  data-ajuda="turmas.codigo"/>
         </div>
         <div>
           <label for="qtd_vagas_turmas" class="block text-sm font-medium mb-2">Quantidade de vagas</label>
           <input type="number" id="qtd_vagas_turmas" min="1" required
-            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]" />
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]"  data-ajuda="turmas.vagas"/>
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
           <label for="status" class="block text-sm font-medium mb-2">Status</label>
-          <select id="status" class="w-full border border-gray-300 rounded-xl px-4 py-3 bg-white">
+          <select id="status" class="w-full border border-gray-300 rounded-xl px-4 py-3 bg-white" data-ajuda="turmas.status">
             <option value="ativa">Ativa</option>
             <option value="encerrada">Encerrada</option>
           </select>
@@ -331,7 +332,7 @@
         <button type="button" id="cancelTurmaModal"
           class="border border-gray-300 px-6 py-3 rounded-xl hover:bg-gray-100 duration-200">Cancelar</button>
         <button type="submit"
-          class="bg-[#07224f] text-white px-6 py-3 rounded-xl hover:opacity-90 duration-200">Salvar e continuar</button>
+          class="bg-[#07224f] text-white px-6 py-3 rounded-xl hover:opacity-90 duration-200" data-ajuda="turmas.salvar">Salvar e continuar</button>
       </div>
     </form>
 
@@ -342,7 +343,7 @@
       <form id="gradeForm" class="space-y-5 border border-gray-200 rounded-2xl p-5 mb-5" novalidate>
         <div>
           <label for="gradeDisciplina" class="block text-sm font-medium mb-2">Disciplina</label>
-          <select id="gradeDisciplina" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-3 outline-none focus:border-[#07224f]">
+          <select id="gradeDisciplina" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-3 outline-none focus:border-[#07224f]" data-ajuda="turmas.gradeDisciplina">
             <option value="">Carregando…</option>
           </select>
           <p id="gradeDisciplinaStatus" class="text-xs text-gray-500 mt-2"></p>
@@ -352,7 +353,7 @@
           <div>
             <label for="professor_id" class="block text-sm font-medium mb-2">Código do professor</label>
             <input type="number" id="professor_id" placeholder="Ex: 1"
-              class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]" />
+              class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]"  data-ajuda="turmas.professorId"/>
           </div>
           <div>
             <label for="professor" class="block text-sm font-medium mb-2">Professor</label>
@@ -362,7 +363,7 @@
         </div>
         <p id="professorStatus" class="text-sm text-gray-500 -mt-3"></p>
 
-        <fieldset class="border border-gray-200 rounded-xl p-5" aria-describedby="horarioAjuda horarioErro">
+        <fieldset class="border border-gray-200 rounded-xl p-5" aria-describedby="horarioAjuda horarioErro" data-ajuda="turmas.dias">
           <legend class="px-2 text-sm font-semibold">Dias e horário da aula</legend>
           <p id="horarioAjuda" class="text-sm text-gray-500 mb-4">Selecione os dias da semana. O horário vale para todos os dias selecionados.</p>
           <div class="flex flex-wrap gap-2 mb-5">
@@ -385,19 +386,19 @@
         <div>
           <label for="sala" class="block text-sm font-medium mb-2">Sala</label>
           <input type="text" id="sala" placeholder="Ex: Bloco A - Sala 12"
-            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]" />
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#07224f]"  data-ajuda="turmas.sala"/>
         </div>
 
         <p id="gradeErro" role="alert" class="text-sm text-red-600 min-h-[1.25rem]"></p>
         <div class="flex justify-end gap-3">
           <button type="button" id="gradeCancelar" class="hidden border border-gray-300 px-5 py-3 rounded-xl hover:bg-gray-100">Cancelar edição</button>
-          <button type="submit" id="gradeSalvar" class="bg-[#07224f] text-white px-5 py-3 rounded-xl hover:opacity-90">Adicionar</button>
+          <button type="submit" id="gradeSalvar" class="bg-[#07224f] text-white px-5 py-3 rounded-xl hover:opacity-90" data-ajuda="turmas.gradeSalvar">Adicionar</button>
         </div>
       </form>
 
       <h3 class="font-semibold text-gray-800 mb-3">Grade da turma</h3>
-      <ul id="gradeLista" class="divide-y divide-gray-100 border border-gray-200 rounded-xl"></ul>
-      <div class="flex justify-end pt-6"><button type="button" id="concluirTurma" class="bg-[#07224f] text-white px-6 py-3 rounded-xl hover:opacity-90">Concluir</button></div>
+      <ul id="gradeLista" class="divide-y divide-gray-100 border border-gray-200 rounded-xl" data-ajuda="turmas.gradeLista"></ul>
+      <div class="flex justify-end pt-6"><button type="button" id="concluirTurma" class="bg-[#07224f] text-white px-6 py-3 rounded-xl hover:opacity-90" data-ajuda="turmas.concluir">Concluir</button></div>
     </div>
 
   </div>

@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const API = 'http://localhost:3000';
+  const API = String(window.SICEP_API_URL || 'http://localhost:3000').replace(/\/+$/, '');
   const dias = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
   const abreviacoes = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom'];
   const el = id => document.getElementById(id);

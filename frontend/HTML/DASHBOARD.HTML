@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="../CSS/MENU.CSS" />
   <link rel="stylesheet" href="../CSS/RESPONSIVO.CSS" />
+  <script src="../JS/CONFIG.JS"></script>
   <script src="../JS/AUTH.JS"></script>
 </head>
 
@@ -29,37 +30,37 @@
         <h3 class="text-[11px] font-bold tracking-[2px] text-gray-500 uppercase px-6 mb-5">Módulos principais</h3>
         <ul class="space-y-1">
           <li>
-            <a href="DASHBOARD.HTML" aria-current="page" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]">
+            <a href="DASHBOARD.HTML" aria-current="page" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]" data-ajuda="menu.dashboard">
               <i class="fa-solid fa-table-columns w-5"></i><span>Dashboard</span>
             </a>
           </li>
           <li>
-            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.alunos">
               <i class="fa-regular fa-user w-5"></i><span>Alunos</span>
             </a>
           </li>
-          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
-          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
+          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.cursos"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
+          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.turmas"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
           <li>
             <span aria-disabled="true" title="Em breve" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-400 cursor-not-allowed"><i class="fa-regular fa-folder w-5"></i><span>Processos Acadêmicos</span><span class="text-[10px]">Em breve</span></span>
           </li>
           <li>
-            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.documentos">
               <i class="fa-regular fa-file-lines w-5"></i><span>Documentos</span>
             </a>
           </li>
           <li>
-            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.grade">
               <i class="fa-regular fa-calendar w-5"></i><span>Grade Horária</span>
             </a>
           </li>
           <li>
-            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.professores">
               <i class="fa-solid fa-users w-5"></i><span>Professores</span>
             </a>
           </li>
           <li>
-            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.usuarios">
               <i class="fa-solid fa-user-shield w-5"></i><span>Usuário e Permissões</span>
             </a>
           </li>
@@ -83,7 +84,7 @@
   <main class="flex-1 min-w-0 flex flex-col overflow-hidden">
     <header class="h-[95px] bg-white border-b border-gray-200 flex items-center justify-between gap-4 px-4 md:px-10 flex-shrink-0">
       <div class="flex items-center gap-4">
-        <button id="menuBtn" type="button" aria-label="Abrir menu" aria-controls="sidebar" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100">
+        <button id="menuBtn" type="button" aria-label="Abrir menu" aria-controls="sidebar" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100" data-ajuda="menu.abrir">
           <i class="fa-solid fa-bars text-lg" aria-hidden="true"></i>
         </button>
         <div>
@@ -98,7 +99,7 @@
         <p class="text-sm text-gray-500 mt-1">Acompanhe os principais indicadores acadêmicos.</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <article class="bg-white border border-gray-200 rounded-2xl p-6">
+        <article class="bg-white border border-gray-200 rounded-2xl p-6" data-ajuda="dash.alunos">
           <div class="flex items-center justify-between gap-4 text-gray-500">
             <h4 class="text-sm font-medium">Alunos ativos</h4>
             <i class="fa-solid fa-graduation-cap text-[#07224f]" aria-hidden="true"></i>
@@ -106,7 +107,7 @@
           <p id="kpiAlunos" class="mt-5 text-3xl font-semibold text-[#07224f]">0</p>
           <p id="kpiAlunosDetalhe" class="mt-2 text-sm text-gray-500">Total de matrículas ativas</p>
         </article>
-        <article class="bg-white border border-gray-200 rounded-2xl p-6">
+        <article class="bg-white border border-gray-200 rounded-2xl p-6" data-ajuda="dash.turmas">
           <div class="flex items-center justify-between gap-4 text-gray-500">
             <h4 class="text-sm font-medium">Turmas ativas</h4>
             <i class="fa-solid fa-users text-[#07224f]" aria-hidden="true"></i>
@@ -114,7 +115,7 @@
           <p id="kpiTurmas" class="mt-5 text-3xl font-semibold text-[#07224f]">0</p>
           <p class="mt-2 text-sm text-gray-500">Turmas em funcionamento</p>
         </article>
-        <article class="bg-white border border-gray-200 rounded-2xl p-6">
+        <article class="bg-white border border-gray-200 rounded-2xl p-6" data-ajuda="dash.professores">
           <div class="flex items-center justify-between gap-4 text-gray-500">
             <h4 class="text-sm font-medium">Professores ativos</h4>
             <i class="fa-solid fa-book-open text-[#07224f]" aria-hidden="true"></i>
@@ -122,7 +123,7 @@
           <p id="kpiProfessores" class="mt-5 text-3xl font-semibold text-[#07224f]">0</p>
           <p class="mt-2 text-sm text-gray-500">Docentes cadastrados e ativos</p>
         </article>
-        <article class="bg-white border border-gray-200 rounded-2xl p-6">
+        <article class="bg-white border border-gray-200 rounded-2xl p-6" data-ajuda="dash.ocupacao">
           <div class="flex items-center justify-between gap-4 text-gray-500">
             <h4 class="text-sm font-medium">Taxa de ocupação</h4>
             <i class="fa-solid fa-chart-simple text-[#07224f]" aria-hidden="true"></i>

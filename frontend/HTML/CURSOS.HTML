@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="../CSS/MENU.CSS" />
   <link rel="stylesheet" href="../CSS/RESPONSIVO.CSS" />
+  <script src="../JS/CONFIG.JS"></script>
   <script src="../JS/AUTH.JS"></script>
 </head>
 
@@ -29,37 +30,37 @@
         <h3 class="text-[11px] font-bold tracking-[2px] text-gray-500 uppercase px-6 mb-5">Módulos principais</h3>
         <ul class="space-y-1">
           <li>
-            <a href="DASHBOARD.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="DASHBOARD.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.dashboard">
               <i class="fa-solid fa-table-columns w-5"></i><span>Dashboard</span>
             </a>
           </li>
           <li>
-            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.alunos">
               <i class="fa-regular fa-user w-5"></i><span>Alunos</span>
             </a>
           </li>
-          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
-          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
+          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]" data-ajuda="menu.cursos"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
+          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.turmas"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
           <li>
             <span aria-disabled="true" title="Em breve" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-400 cursor-not-allowed"><i class="fa-regular fa-folder w-5"></i><span>Processos Acadêmicos</span><span class="text-[10px]">Em breve</span></span>
           </li>
           <li>
-            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.documentos">
               <i class="fa-regular fa-file-lines w-5"></i><span>Documentos</span>
             </a>
           </li>
           <li>
-            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.grade">
               <i class="fa-regular fa-calendar w-5"></i><span>Grade Horária</span>
             </a>
           </li>
           <li>
-            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.professores">
               <i class="fa-solid fa-users w-5"></i><span>Professores</span>
             </a>
           </li>
           <li>
-            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.usuarios">
               <i class="fa-solid fa-user-shield w-5"></i><span>Usuário e Permissões</span>
             </a>
           </li>
@@ -86,7 +87,7 @@
     <!-- TOPBAR -->
     <header class="h-[95px] bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-10 flex-shrink-0">
       <div class="flex items-center gap-4">
-        <button id="menuBtn" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100">
+        <button id="menuBtn" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100" data-ajuda="menu.abrir">
           <i class="fa-solid fa-bars text-lg"></i>
         </button>
         <div>
@@ -94,7 +95,7 @@
           <h2 class="text-lg md:text-[22px] font-semibold">Cursos</h2>
         </div>
       </div>
-      <button id="novoCursoBtn" class="bg-[#07224f] hover:opacity-90 duration-200 text-white px-6 py-3 rounded-md text-sm flex items-center justify-center gap-3">
+      <button id="novoCursoBtn" class="bg-[#07224f] hover:opacity-90 duration-200 text-white px-6 py-3 rounded-md text-sm flex items-center justify-center gap-3" data-ajuda="cursos.novo">
         <i class="fa-solid fa-plus"></i>Novo curso
       </button>
     </header>
@@ -107,7 +108,7 @@
       <div class="h-[1px] bg-black/10 mb-8"></div>
 
       <!-- CARDS -->
-      <div id="cardsContainer" class="grid grid-cols-1 gap-6"></div>
+      <div id="cardsContainer" class="grid grid-cols-1 gap-6" data-ajuda="cursos.lista"></div>
     </section>
 
   </main>
@@ -126,27 +127,27 @@
 
     <div role="tablist" class="flex gap-2 border-b border-gray-200 mb-6">
       <button type="button" role="tab" id="abaDados" data-aba="dados" class="aba-curso px-4 py-3 text-sm font-semibold border-b-[3px] -mb-px">1. Dados do curso</button>
-      <button type="button" role="tab" id="abaDisc" data-aba="disciplinas" class="aba-curso px-4 py-3 text-sm font-semibold border-b-[3px] -mb-px">2. Disciplinas</button>
+      <button type="button" role="tab" id="abaDisc" data-aba="disciplinas" class="aba-curso px-4 py-3 text-sm font-semibold border-b-[3px] -mb-px" data-ajuda="cursos.abaDisc">2. Disciplinas</button>
     </div>
 
     <!-- ABA 1 -->
     <form id="cursoForm" class="space-y-5">
-      <div><label for="nome" class="text-sm font-medium block mb-2">Nome do curso</label><input type="text" id="nome" required maxlength="150" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]" /></div>
-      <div><label for="duracao" class="text-sm font-medium block mb-2">Tempo de dura&#231;&#227;o (horas)</label><input id="duracao" type="number" min="1" step="1" required placeholder="Ex.: 120" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]" /></div>
-      <div class="flex justify-end gap-3 pt-4"><button type="button" id="cancelModal" class="border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50">Cancelar</button><button type="submit" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90">Salvar e continuar</button></div>
+      <div><label for="nome" class="text-sm font-medium block mb-2">Nome do curso</label><input type="text" id="nome" required maxlength="150" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]"  data-ajuda="cursos.nome"/></div>
+      <div><label for="duracao" class="text-sm font-medium block mb-2">Tempo de dura&#231;&#227;o (horas)</label><input id="duracao" type="number" min="1" step="1" required placeholder="Ex.: 120" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]"  data-ajuda="cursos.duracao"/></div>
+      <div class="flex justify-end gap-3 pt-4"><button type="button" id="cancelModal" class="border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50">Cancelar</button><button type="submit" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90" data-ajuda="cursos.salvar">Salvar e continuar</button></div>
     </form>
 
     <!-- ABA 2 -->
     <div id="painelDisc" class="hidden">
       <p class="text-sm text-gray-500 mb-4">Cada disciplina é salva assim que você clica em Adicionar.</p>
       <form id="discForm" class="grid grid-cols-1 sm:grid-cols-[1fr_140px_auto] gap-3 items-end mb-3">
-        <div><label for="discNome" class="text-sm font-medium block mb-2">Disciplina</label><input id="discNome" type="text" required maxlength="150" placeholder="Ex.: Redes de Computadores" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]" /></div>
-        <div><label for="discCarga" class="text-sm font-medium block mb-2">Carga (h)</label><input id="discCarga" type="number" min="1" step="1" placeholder="Ex.: 60" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]" /></div>
-        <div class="flex gap-2"><button type="submit" id="discSalvar" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90 whitespace-nowrap">Adicionar</button><button type="button" id="discCancelar" class="hidden border border-gray-300 px-4 py-3 rounded-lg hover:bg-gray-50">Cancelar</button></div>
+        <div><label for="discNome" class="text-sm font-medium block mb-2">Disciplina</label><input id="discNome" type="text" required maxlength="150" placeholder="Ex.: Redes de Computadores" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]"  data-ajuda="cursos.discNome"/></div>
+        <div><label for="discCarga" class="text-sm font-medium block mb-2">Carga (h)</label><input id="discCarga" type="number" min="1" step="1" placeholder="Ex.: 60" class="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-[#07224f]"  data-ajuda="cursos.discCarga"/></div>
+        <div class="flex gap-2"><button type="submit" id="discSalvar" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90 whitespace-nowrap" data-ajuda="cursos.discSalvar">Adicionar</button><button type="button" id="discCancelar" class="hidden border border-gray-300 px-4 py-3 rounded-lg hover:bg-gray-50">Cancelar</button></div>
       </form>
       <p id="discErro" role="alert" class="text-sm text-red-600 mb-3 min-h-[1.25rem]"></p>
-      <ul id="discLista" class="divide-y divide-gray-100 border border-gray-200 rounded-xl"></ul>
-      <div class="flex justify-end pt-6"><button type="button" id="concluirModal" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90">Concluir</button></div>
+      <ul id="discLista" class="divide-y divide-gray-100 border border-gray-200 rounded-xl" data-ajuda="cursos.discLista"></ul>
+      <div class="flex justify-end pt-6"><button type="button" id="concluirModal" class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90" data-ajuda="cursos.concluir">Concluir</button></div>
     </div>
   </div>
 </div>

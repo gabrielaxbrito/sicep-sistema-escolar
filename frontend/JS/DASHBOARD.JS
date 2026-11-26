@@ -1,5 +1,5 @@
 (() => {
-  const API = 'http://localhost:3000';
+  const API = String(window.SICEP_API_URL || 'http://localhost:3000').replace(/\/+$/, '');
 
   // Cores: uma por medida (turmas = azul) e uma por ano (ano atual = laranja, ano anterior = cinza)
   const COR_TURMAS = '#07224f';

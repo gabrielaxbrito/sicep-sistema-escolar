@@ -1,5 +1,5 @@
 
-  const API = 'http://localhost:3000'
+  const API = String(window.SICEP_API_URL || 'http://localhost:3000').replace(/\/+$/, '')
 
   // ========================= ESTADO =========================
 
@@ -309,17 +309,17 @@
             <div class="flex items-center justify-center gap-1">
               <button onclick="abrirVisaoAluno(${aluno.id})"
                 class="w-8 h-8 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 duration-200 flex items-center justify-center"
-                title="Matrícula e frequência">
+                title="Matrícula e frequência" data-ajuda="alunos.btnVisao">
                 <i class="fa-solid fa-graduation-cap text-sm"></i>
               </button>
               <button onclick="abrirEdicao(${aluno.id})"
                 class="w-8 h-8 rounded-lg text-gray-400 hover:text-[#07224f] hover:bg-gray-100 duration-200 flex items-center justify-center"
-                title="Editar">
+                title="Editar" data-ajuda="alunos.btnEditar">
                 <i class="fa-regular fa-pen-to-square text-sm"></i>
               </button>
               <button onclick="confirmarExclusao(${aluno.id}, '${aluno.nome.replace(/'/g, "\\'")}')"
                 class="w-8 h-8 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 duration-200 flex items-center justify-center"
-                title="Excluir">
+                title="Excluir" data-ajuda="alunos.btnExcluir">
                 <i class="fa-regular fa-trash-can text-sm"></i>
               </button>
             </div>
@@ -431,7 +431,7 @@
       </div>` : `<p class="mt-4 text-base text-gray-500">Nenhuma disciplina cadastrada na grade desta turma.</p>`
     return `
       <div>
-        <button type="button" id="matBtn${m.id}" onclick="alternarMatricula(${m.id})" aria-expanded="${aberta}" class="w-full flex items-center justify-between gap-4 px-5 py-5 text-left hover:bg-gray-50">
+        <button type="button" id="matBtn${m.id}" data-ajuda="alunos.visaoMais" onclick="alternarMatricula(${m.id})" aria-expanded="${aberta}" class="w-full flex items-center justify-between gap-4 px-5 py-5 text-left hover:bg-gray-50">
           <span class="min-w-0">
             <span class="block text-lg font-semibold text-gray-900">${esc(m.curso?.nome || '—')}</span>
             <span class="flex flex-wrap items-center gap-x-5 gap-y-2 mt-1.5 text-base">

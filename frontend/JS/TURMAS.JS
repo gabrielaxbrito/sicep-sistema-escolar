@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000';
+const API = String(window.SICEP_API_URL || 'http://localhost:3000').replace(/\/+$/, '');
 const cardsContainer = document.getElementById('cardsContainer');
 let todasTurmas = [];
 const gradesRecolhidas = new Set();   // ids das turmas com as disciplinas escondidas
@@ -99,6 +99,7 @@ function renderizarTurmas() {
     // Botão + / − para mostrar ou esconder as disciplinas (o estado fica guardado entre filtros)
     const alternar = el('button', 'turma-grade-toggle');
     alternar.type = 'button';
+    alternar.dataset.ajuda = 'turmas.toggle';
     const aplicar = () => {
       const aberta = !gradesRecolhidas.has(turma.id);
       corpoGrade.hidden = !aberta;
@@ -114,17 +115,18 @@ function renderizarTurmas() {
     grade.append(alternar, corpoGrade);
 
     const acoes = el('div', 'turma-acoes');
-    const botao = (rotulo, icone, classe, aoClicar) => {
+    const botao = (rotulo, icone, classe, aoClicar, marca) => {
       const b = el('button', classe); b.type = 'button';
+      if (marca) b.dataset.ajuda = marca;
       b.innerHTML = `<i class="fa-solid ${icone} mr-2"></i>${rotulo}`;
       b.addEventListener('click', aoClicar); return b;
     };
     acoes.append(
-      botao('Alunos', 'fa-user-graduate', 'editar', () => abrirAlunosTurma(turma)),
-      botao('Presença', 'fa-clipboard-check', 'editar', () => abrirPresenca(turma)),
-      botao('Grade', 'fa-table-list', 'editar', () => abrirModalTurma(turma.curso_id, turma, 'grade')),
-      botao('Editar', 'fa-pen', 'editar', () => abrirModalTurma(turma.curso_id, turma, 'dados')),
-      botao('Excluir', 'fa-trash', 'excluir', () => excluirTurma(turma.id)));
+      botao('Alunos', 'fa-user-graduate', 'editar', () => abrirAlunosTurma(turma), 'turmas.btnAlunos'),
+      botao('Presença', 'fa-clipboard-check', 'editar', () => abrirPresenca(turma), 'turmas.btnPresenca'),
+      botao('Grade', 'fa-table-list', 'editar', () => abrirModalTurma(turma.curso_id, turma, 'grade'), 'turmas.btnGrade'),
+      botao('Editar', 'fa-pen', 'editar', () => abrirModalTurma(turma.curso_id, turma, 'dados'), 'turmas.btnEditar'),
+      botao('Excluir', 'fa-trash', 'excluir', () => excluirTurma(turma.id), 'turmas.btnExcluir'));
 
     card.append(topo, el('h3', '', turma.codigo || 'Sem código'), dl, grade, acoes);
     cardsContainer.append(card);

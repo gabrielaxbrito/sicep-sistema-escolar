@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000'
+const API = String(window.SICEP_API_URL || 'http://localhost:3000').replace(/\/+$/, '')
 
 let tipoDeclaracao       = null
 let alunoSelecionado     = null

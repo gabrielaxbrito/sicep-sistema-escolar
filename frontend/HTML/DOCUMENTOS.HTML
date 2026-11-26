@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="../CSS/RESPONSIVO.CSS" />
+  <script src="../JS/CONFIG.JS"></script>
   <script src="../JS/AUTH.JS"></script>
 </head>
 
@@ -28,37 +29,37 @@
         <h3 class="text-[11px] font-bold tracking-[2px] text-gray-500 uppercase px-6 mb-5">Módulos principais</h3>
         <ul class="space-y-1">
           <li>
-            <a href="DASHBOARD.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="DASHBOARD.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.dashboard">
               <i class="fa-solid fa-table-columns w-5"></i><span>Dashboard</span>
             </a>
           </li>
           <li>
-            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="ALUNOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.alunos">
               <i class="fa-regular fa-user w-5"></i><span>Alunos</span>
             </a>
           </li>
-          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
-          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
+          <li><a href="CURSOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.cursos"><i class="fa-solid fa-graduation-cap w-5"></i><span>Cursos</span></a></li>
+          <li><a href="TURMAS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.turmas"><i class="fa-solid fa-chalkboard w-5"></i><span>Turmas</span></a></li>
           <li>
             <span aria-disabled="true" title="Em breve" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-400 cursor-not-allowed"><i class="fa-regular fa-folder w-5"></i><span>Processos Acadêmicos</span><span class="text-[10px]">Em breve</span></span>
           </li>
           <li>
-            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]">
+            <a href="DOCUMENTOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm bg-gray-100 text-black font-semibold border-r-4 border-[#07224f]" data-ajuda="menu.documentos">
               <i class="fa-regular fa-file-lines w-5"></i><span>Documentos</span>
             </a>
           </li>
           <li>
-            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="GRADE_HORARIA.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.grade">
               <i class="fa-regular fa-calendar w-5"></i><span>Grade Horária</span>
             </a>
           </li>
           <li>
-            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="PROFESSORES.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.professores">
               <i class="fa-solid fa-users w-5"></i><span>Professores</span>
             </a>
           </li>
           <li>
-            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200">
+            <a href="USUARIOS.HTML" class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 duration-200" data-ajuda="menu.usuarios">
               <i class="fa-solid fa-user-shield w-5"></i><span>Usuário e Permissões</span>
             </a>
           </li>
@@ -85,7 +86,7 @@
     <!-- TOPBAR -->
     <header class="h-[95px] bg-white border-b border-gray-200 flex items-center px-4 md:px-10 flex-shrink-0">
       <div class="flex items-center gap-4">
-        <button id="menuBtn" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100">
+        <button id="menuBtn" class="md:hidden w-10 h-10 rounded-lg hover:bg-gray-100" data-ajuda="menu.abrir">
           <i class="fa-solid fa-bars text-lg"></i>
         </button>
         <div>
@@ -102,7 +103,7 @@
       <div class="relative mb-8 max-w-md">
         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
         <input id="buscaInput" type="text" placeholder="Buscar documento..."
-          class="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 text-sm outline-none focus:border-[#07224f]" />
+          class="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 text-sm outline-none focus:border-[#07224f]"  data-ajuda="docs.busca"/>
       </div>
 
       <!-- SEÇÃO: EMISSÃO IMEDIATA -->
@@ -112,23 +113,23 @@
           <div class="flex-1 h-px bg-gray-200"></div>
         </div>
         <p class="text-sm text-gray-500 mb-5">Documentos em PDF com informações já cadastradas no sistema. Na janela de impressão, escolha Salvar como PDF.</p>
-        <div id="gridEmissao" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div id="gridEmissao" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" data-ajuda="docs.emissao">
 
           <button onclick="abrirModalDeclaracao('curso')"
-            class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex items-center justify-start hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex items-center justify-start hover:border-[#07224f] hover:shadow-md duration-200 text-left" data-ajuda="docs.card_curso">
             <p class="text-sm font-semibold text-gray-800 leading-tight">Declaração de Curso</p>
           </button>
 
           <button onclick="abrirModalDeclaracao('frequencia')"
-            class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex items-center justify-start hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex items-center justify-start hover:border-[#07224f] hover:shadow-md duration-200 text-left" data-ajuda="docs.card_frequencia">
             <p class="text-sm font-semibold text-gray-800 leading-tight">Declaração de Frequência</p>
           </button>
 
-          <button type="button" onclick="abrirModalDeclaracao('matricula')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+          <button type="button" onclick="abrirModalDeclaracao('matricula')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left" data-ajuda="docs.card_matricula">
             <p class="text-sm font-semibold text-gray-800 leading-tight">Comprovante de Matrícula</p>
             <span class="text-xs text-gray-500 leading-relaxed">Comprovar que o aluno está matriculado na instituição.</span>
           </button>
-          <button type="button" onclick="abrirModalDeclaracao('vinculo')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+          <button type="button" onclick="abrirModalDeclaracao('vinculo')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left" data-ajuda="docs.card_vinculo">
             <p class="text-sm font-semibold text-gray-800 leading-tight">Declaração de Vínculo Escolar</p>
             <span class="text-xs text-gray-500 leading-relaxed">Confirmar que o aluno mantém vínculo ativo com a instituição.</span>
           </button>
@@ -136,7 +137,7 @@
             <p class="text-sm font-semibold text-gray-800 leading-tight">Boletim de Notas</p>
             <span class="text-xs text-gray-500 leading-relaxed">Apresentar notas e resultados acadêmicos.</span>
           </button>
-          <button type="button" onclick="abrirModalDeclaracao('historico')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+          <button type="button" onclick="abrirModalDeclaracao('historico')" class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-start gap-3 hover:border-[#07224f] hover:shadow-md duration-200 text-left" data-ajuda="docs.card_historico">
             <p class="text-sm font-semibold text-gray-800 leading-tight">Histórico de Frequência</p>
             <span class="text-xs text-gray-500 leading-relaxed">Detalhar presenças e faltas por período ou disciplina.</span>
           </button>
@@ -157,10 +158,10 @@
           <h3 class="text-sm font-bold tracking-[2px] uppercase text-gray-500">Requer solicitação</h3>
           <div class="flex-1 h-px bg-gray-200"></div>
         </div>
-        <div id="gridSolicitacoes" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div id="gridSolicitacoes" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" data-ajuda="docs.solicitacoes">
 
           <button onclick="abrirModalCertificacao()"
-            class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex items-center justify-start hover:border-[#07224f] hover:shadow-md duration-200 text-left">
+            class="doc-card bg-white border border-gray-200 rounded-2xl p-6 flex items-center justify-start hover:border-[#07224f] hover:shadow-md duration-200 text-left" data-ajuda="docs.cardCertificado">
             <p class="text-sm font-semibold text-gray-800 leading-tight">Certificado de Conclusão</p>
           </button>
 
@@ -190,8 +191,8 @@
       <label id="labelIdDeclaracao" class="text-sm font-medium block mb-2">ID do aluno <span class="text-red-500">*</span></label>
       <div class="flex gap-2">
         <input id="idDeclaracaoInput" type="number" placeholder="Digite o ID do aluno..."
-          class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#07224f]" />
-        <button onclick="buscarDeclaracao()" class="bg-[#07224f] text-white px-4 py-3 rounded-lg text-sm hover:opacity-90">
+          class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#07224f]"  data-ajuda="docs.id"/>
+        <button onclick="buscarDeclaracao()" class="bg-[#07224f] text-white px-4 py-3 rounded-lg text-sm hover:opacity-90" data-ajuda="docs.buscar">
           <i class="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
@@ -209,14 +210,14 @@
     <div id="campoFrequencia" class="hidden mb-5">
       <label class="text-sm font-medium block mb-2">Frequência geral (%)</label>
       <input id="frequenciaValor" type="number" min="0" max="100" readonly
-        class="w-full border border-gray-200 bg-gray-50 rounded-lg px-4 py-3 text-sm text-gray-700" />
+        class="w-full border border-gray-200 bg-gray-50 rounded-lg px-4 py-3 text-sm text-gray-700"  data-ajuda="docs.frequencia"/>
       <p class="text-xs text-gray-400 mt-1">Calculada automaticamente com base nos registros do banco.</p>
     </div>
 
     <div class="flex justify-end gap-3 pt-2">
       <button onclick="fecharModalDeclaracao()" class="border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50 text-sm">Cancelar</button>
       <button id="btnImprimir" onclick="imprimirDeclaracao()" disabled
-        class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90 text-sm disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2">
+        class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90 text-sm disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2" data-ajuda="docs.gerarPdf">
         <i class="fa-solid fa-file-pdf"></i> Gerar PDF
       </button>
     </div>
@@ -248,8 +249,8 @@
         <label class="text-sm font-medium block mb-2">ID do aluno <span class="text-red-500">*</span></label>
         <div class="flex gap-2">
           <input id="idAlunoCertInput" type="number" placeholder="Digite o ID do aluno..."
-            class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#07224f]" />
-          <button onclick="buscarAlunoPorIdCert()" class="bg-[#07224f] text-white px-4 py-3 rounded-lg text-sm hover:opacity-90">
+            class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#07224f]"  data-ajuda="docs.certId"/>
+          <button onclick="buscarAlunoPorIdCert()" class="bg-[#07224f] text-white px-4 py-3 rounded-lg text-sm hover:opacity-90" data-ajuda="docs.certBuscar">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
@@ -265,7 +266,7 @@
       <div>
         <label class="text-sm font-medium block mb-2">Observações</label>
         <textarea id="obsCert" rows="2" placeholder="Informações adicionais (opcional)"
-          class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#07224f] resize-none"></textarea>
+          class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#07224f] resize-none" data-ajuda="docs.certObs"></textarea>
       </div>
 
     </div>
@@ -279,7 +280,7 @@
     <div class="flex justify-end gap-3 pt-5">
       <button onclick="fecharModalCertificacao()" class="border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50 text-sm">Cancelar</button>
       <button id="btnSolicitarCert" onclick="solicitarCertificacao()"
-        class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90 text-sm flex items-center gap-2">
+        class="bg-[#07224f] text-white px-5 py-3 rounded-lg hover:opacity-90 text-sm flex items-center gap-2" data-ajuda="docs.certEnviar">
         <i class="fa-solid fa-paper-plane"></i> Enviar solicitação
       </button>
     </div>

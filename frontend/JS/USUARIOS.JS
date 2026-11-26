@@ -153,8 +153,9 @@ function mostrarSucesso(texto) {
   sucessoMsg.classList.remove('hidden');
 }
 
-function criarBotaoAcao(texto, classe, rotulo, aoClicar) {
+function criarBotaoAcao(texto, classe, rotulo, aoClicar, marca) {
   const botao = document.createElement('button');
+  if (marca) botao.dataset.ajuda = marca;
   botao.type = 'button';
   botao.className = classe;
   botao.textContent = texto;
@@ -194,7 +195,7 @@ function renderizarUsuarios() {
 
     const acoes = document.createElement('td');
     acoes.className = 'px-6 py-4 text-sm whitespace-nowrap';
-    acoes.append(criarBotaoAcao('Editar', 'text-[#07224f] font-semibold rounded-md px-3 py-2 hover:bg-gray-100', `Editar ${usuario.nome}`, () => abrirUsuario(usuario)));
+    acoes.append(criarBotaoAcao('Editar', 'text-[#07224f] font-semibold rounded-md px-3 py-2 hover:bg-gray-100', `Editar ${usuario.nome}`, () => abrirUsuario(usuario), 'usuarios.btnEditar'));
     if (!souEu) {
       acoes.append(criarBotaoAcao(
         usuario.ativo ? 'Desativar' : 'Reativar',

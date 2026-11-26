@@ -1,5 +1,5 @@
 (() => {
-  const API = 'http://localhost:3000';
+  const API = String(window.SICEP_API_URL || 'http://localhost:3000').replace(/\/+$/, '');
   const el = id => document.getElementById(id);
   const modal = el('modal');
   const form = el('cursoForm');
@@ -169,10 +169,13 @@
           texto('p', `${duracao} • ${n} disciplina${n === 1 ? '' : 's'}`, 'text-sm text-gray-500 mb-4'));
         const acoes = texto('div', '', 'flex flex-wrap gap-3');
         const editar = texto('button', 'Editar curso', 'border border-gray-300 rounded-lg px-4 py-2 text-sm');
+        editar.dataset.ajuda = 'cursos.btnEditar';
         editar.addEventListener('click', () => abrir(curso));
         const disc = texto('button', 'Disciplinas', 'border border-gray-300 rounded-lg px-4 py-2 text-sm');
+        disc.dataset.ajuda = 'cursos.btnDisciplinas';
         disc.addEventListener('click', () => abrir(curso, 'disciplinas'));
         const excluir = texto('button', 'Excluir curso', 'border border-red-200 text-red-600 rounded-lg px-4 py-2 text-sm');
+        excluir.dataset.ajuda = 'cursos.btnExcluir';
         excluir.addEventListener('click', async () => {
           if (!confirm('Excluir este curso? As turmas e disciplinas vinculadas também serão excluídas.')) return;
           excluir.disabled = true;
@@ -180,6 +183,7 @@
           catch (falha) { alert(falha.message); excluir.disabled = false; }
         });
         const turmas = texto('a', 'Ver turmas', 'border border-gray-300 rounded-lg px-4 py-2 text-sm');
+        turmas.dataset.ajuda = 'cursos.btnVerTurmas';
         turmas.href = `TURMAS.HTML?curso=${encodeURIComponent(curso.id)}`;
         acoes.append(editar, disc, excluir, turmas); card.append(acoes); lista.append(card);
       });
